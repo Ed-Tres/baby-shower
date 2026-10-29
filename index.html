@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Mesa de regalos para el baby shower. Elige un detalle y regálalo.">
+    <meta name="theme-color" content="#fdf8f6">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Baby Shower - Mesa de Regalos">
+    <meta property="og:description" content="Mesa de regalos para el baby shower. Elige un detalle y regálalo.">
+    <title>Baby Shower - Mesa de Regalos</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BC%3C/text%3E%3C/svg%3E">
+
+    <!-- Preconexiones para cargar las fuentes más rápido -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        baby: {
+                            50: '#fdf8f6', 100: '#f2e8e5', 200: '#e8d5d0', 300: '#d9b8b0', 400: '#c59588',
+                            500: '#b0786a', 600: '#975e51', 700: '#7c4a3f', 800: '#683f36', 900: '#58372f',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        fredoka: ['Fredoka', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Ocultar barras de desplazamiento en las pastillas de categoría (sin afectar el scroll) */
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* Accesibilidad: foco visible con teclado */
+        :focus-visible { outline: 3px solid #f43f5e; outline-offset: 2px; border-radius: 8px; }
+
+        /* Respetar a quien prefiere menos animaciones */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-full flex flex-col text-slate-800 bg-slate-50 font-sans antialiased">
+<noscript>
+    <p class="p-6 text-center">Esta página necesita JavaScript para mostrar y guardar la lista de regalos.</p>
+</noscript>
+
+    <!-- Barra superior: modo de vista -->
+    <div class="sticky top-0 z-40 bg-slate-900 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true"></span>
+                <span class="font-medium text-slate-300">Modo de vista:</span>
+                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold">
+                    Invitado
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button id="toggleAdminBtn" type="button" aria-pressed="false" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                    <span id="toggleAdminBtnText">Modo organizador</span>
+                </button>
+                <button id="adminSettingsBtn" type="button" onclick="openModal('settingsModal')" class="hidden px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition" aria-label="Ajustes y opciones" title="Ajustes y opciones">
+                    <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Encabezado -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-rose-100 via-pink-50 to-slate-50 pt-8 sm:pt-10 pb-10 sm:pb-12 px-4 border-b border-rose-100">
+        <!-- Decoración (ocultamos algunas en móvil para aligerar el render) -->
+        <div class="absolute -top-10 -left-10 w-40 h-40 bg-pink-200/50 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+        <div class="hidden sm:block absolute top-1/2 -right-10 w-56 h-56 bg-sky-200/40 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute bottom-0 left-1/3 w-48 sm:w-64 h-48 sm:h-64 bg-amber-100/50 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <button id="editEventBtn" type="button" onclick="openEditEventModal()" class="hidden mb-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/80 hover:bg-white text-rose-700 text-xs font-semibold rounded-full shadow-sm border border-rose-200 transition">
+                <i class="fa-solid fa-pencil" aria-hidden="true"></i> Editar detalles del evento
+            </button>
+
+            <span class="inline-block px-3 py-1 bg-white/80 text-rose-600 font-medium text-xs sm:text-sm rounded-full shadow-sm mb-3 tracking-wide uppercase">
+                <i class="fa-solid fa-baby mr-1" aria-hidden="true"></i> ¡Celebrando la llegada!
+            </span>
+
+            <h1 id="displayTitle" class="font-fredoka text-3xl sm:text-5xl md:text-6xl text-slate-800 tracking-tight font-bold mb-3 leading-tight break-words">
+                Baby Shower de Sofía
+            </h1>
+
+            <p id="displaySubtitle" class="text-slate-600 font-medium text-sm sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
+                Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.
+            </p>
+
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
+                <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
+                    <i class="fa-regular fa-calendar-check text-rose-500" aria-hidden="true"></i>
+                    <span id="displayDate" class="font-semibold break-words">Sábado, 18 de Noviembre • 4:00 PM</span>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
+                    <i class="fa-solid fa-location-dot text-rose-500" aria-hidden="true"></i>
+                    <span id="displayLocation" class="font-semibold break-words">Casa de los Abuelos / Salón de Eventos</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8 flex-grow">
+
+        <!-- Panel del organizador (solo en modo edición) -->
+        <section id="adminBanner" class="hidden mb-6 sm:mb-8 p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-2xl shadow-sm" aria-label="Panel del organizador">
+            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
+                <div>
+                    <h2 class="font-bold text-amber-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-amber-600" aria-hidden="true"></i> Panel de administración de la lista
+                    </h2>
+                    <p class="text-xs sm:text-sm text-amber-800 mt-1">
+                        Puedes añadir artículos, editarlos o eliminar los que no necesites.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 sm:flex gap-2 sm:w-auto">
+                    <button type="button" onclick="openAddItemModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 col-span-2 sm:col-span-1">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir artículo
+                    </button>
+                    <button type="button" onclick="resetToDefaults()" class="px-3 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium text-xs rounded-xl transition flex items-center justify-center gap-1.5" title="Restaurar la lista original">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Restaurar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Búsqueda, estadísticas y categorías -->
+        <section class="mb-6 sm:mb-8 space-y-4" aria-label="Buscar y filtrar regalos">
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <label class="relative w-full sm:w-80">
+                    <span class="sr-only">Buscar un regalo</span>
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" aria-hidden="true"></i>
+                    <input type="search" id="searchInput" placeholder="Buscar un regalo..." autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent shadow-sm transition">
+                </label>
+
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs sm:text-sm" role="status" aria-live="polite">
+                    <div class="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm whitespace-nowrap">
+                        Total: <span id="statTotal" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-100 shadow-sm whitespace-nowrap">
+                        Disponibles: <span id="statAvailable" class="font-bold">0</span>
+                    </div>
+                    <div class="px-3 py-1.5 bg-rose-50 text-rose-800 rounded-lg border border-rose-100 shadow-sm whitespace-nowrap">
+                        Reservados: <span id="statClaimed" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="categoryFilters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs sm:text-sm" role="group" aria-label="Filtrar por categoría"></div>
+        </section>
+
+        <!-- Cuadrícula de regalos -->
+        <section aria-label="Lista de regalos">
+            <div id="giftGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
+
+            <div id="emptyState" class="hidden text-center py-12 sm:py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-6 sm:p-8 my-4">
+                <div class="w-16 h-16 bg-rose-50 text-rose-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl" aria-hidden="true">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h2 class="font-semibold text-slate-700 text-base">No se encontraron regalos</h2>
+                <p class="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o selecciona otra categoría.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="mt-12 sm:mt-16 bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p class="font-medium text-slate-600">Baby Shower • ¡Gracias por acompañarnos!</p>
+            <p class="text-slate-400">Los datos de esta lista se guardan en el navegador de cada persona.</p>
+        </div>
+    </footer>
+
+    <!-- ============== MODALES ============== -->
+
+    <!-- Reservar regalo (invitados) -->
+    <div id="reserveModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="reserveTitle" class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeModal('reserveModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
+            </button>
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl" aria-hidden="true">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h2 id="reserveTitle" class="font-bold text-lg text-slate-800">Regalar este artículo</h2>
+                <p id="reserveItemName" class="text-sm font-semibold text-rose-600 mt-1 break-words"></p>
+            </div>
+
+            <form id="reserveForm" onsubmit="handleReserveSubmit(event)" class="space-y-4">
+                <input type="hidden" id="reserveItemId">
+                <div>
+                    <label for="guestNameInput" class="block text-xs font-semibold text-slate-700 mb-1">Tu nombre completo *</label>
+                    <input type="text" id="guestNameInput" required autocomplete="name" maxlength="80" placeholder="Ej. María García" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                </div>
+                <div>
+                    <label for="guestNoteInput" class="block text-xs font-semibold text-slate-700 mb-1">Un mensaje con cariño (opcional)</label>
+                    <textarea id="guestNoteInput" rows="3" maxlength="300" placeholder="¡Muchas felicidades por la nueva integrante! Con todo mi cariño..." class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('reserveModal')" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Confirmar regalo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Añadir / editar artículo (organizador) -->
+    <div id="itemModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="itemModalTitle" class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeModal('itemModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
+            </button>
+            <h2 id="itemModalTitle" class="font-bold text-lg text-slate-800 mb-4 pr-8">Añadir nuevo artículo</h2>
+
+            <form id="itemForm" onsubmit="handleItemSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editItemId">
+                <div>
+                    <label for="itemTitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Nombre del artículo *</label>
+                    <input type="text" id="itemTitleInput" required maxlength="120" placeholder="Ej. Cojín de lactancia" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="itemCategoryInput" class="block text-xs font-semibold text-slate-700 mb-1">Categoría</label>
+                        <select id="itemCategoryInput" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none bg-white">
+                            <option value="Higiene">Higiene</option>
+                            <option value="Pañales">Pañales</option>
+                            <option value="Ropa">Ropa</option>
+                            <option value="Alimentación">Alimentación</option>
+                            <option value="Sueño">Sueño</option>
+                            <option value="Paseo">Paseo</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Varios">Varios</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="itemIconInput" class="block text-xs font-semibold text-slate-700 mb-1">Icono / emoji</label>
+                        <input type="text" id="itemIconInput" maxlength="30" placeholder="Ej. 🍼 o fa-baby" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label for="itemDescInput" class="block text-xs font-semibold text-slate-700 mb-1">Descripción / notas</label>
+                    <textarea id="itemDescInput" rows="2" maxlength="250" placeholder="Ej. Talla 0-3 meses, de preferencia colores neutros." class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
+                </div>
+                <label class="flex items-center gap-2 py-1 cursor-pointer">
+                    <input type="checkbox" id="itemPriorityInput" class="w-4 h-4 rounded text-rose-600 focus:ring-rose-400">
+                    <span class="text-xs font-semibold text-slate-700">Marcar como "Imprescindible / prioritario"</span>
+                </label>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('itemModal')" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Guardar artículo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Editar detalles del evento (organizador) -->
+    <div id="eventModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="eventModalTitle" class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeModal('eventModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
+            </button>
+            <h2 id="eventModalTitle" class="font-bold text-lg text-slate-800 mb-4 pr-8">Editar detalles del evento</h2>
+
+            <form id="eventForm" onsubmit="handleEventSubmit(event)" class="space-y-4">
+                <div>
+                    <label for="eventTitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Título / nombre del bebé *</label>
+                    <input type="text" id="eventTitleInput" required maxlength="100" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                </div>
+                <div>
+                    <label for="eventSubtitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Mensaje de bienvenida</label>
+                    <textarea id="eventSubtitleInput" rows="3" maxlength="400" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label for="eventDateInput" class="block text-xs font-semibold text-slate-700 mb-1">Fecha y hora</label>
+                    <input type="text" id="eventDateInput" maxlength="100" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                </div>
+                <div>
+                    <label for="eventLocationInput" class="block text-xs font-semibold text-slate-700 mb-1">Lugar / ubicación</label>
+                    <input type="text" id="eventLocationInput" maxlength="120" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('eventModal')" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ajustes: exportar / importar / restablecer (organizador) -->
+    <div id="settingsModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="settingsTitle" class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
+            <button type="button" onclick="closeModal('settingsModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
+            </button>
+            <h2 id="settingsTitle" class="font-bold text-lg text-slate-800 mb-2 pr-8">Opciones avanzadas</h2>
+            <p class="text-xs text-slate-500 mb-4">Guarda una copia de seguridad de la lista o carga una copia guardada antes.</p>
+
+            <div class="space-y-3">
+                <button type="button" onclick="exportData()" class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl transition flex items-center justify-between">
+                    <span><i class="fa-solid fa-download mr-2 text-rose-500" aria-hidden="true"></i> Exportar datos (JSON)</span>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400" aria-hidden="true"></i>
+                </button>
+
+                <label class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl transition flex items-center justify-between cursor-pointer">
+                    <span><i class="fa-solid fa-upload mr-2 text-rose-500" aria-hidden="true"></i> Importar datos</span>
+                    <input type="file" id="importFileInput" accept="application/json,.json" class="sr-only">
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400" aria-hidden="true"></i>
+                </label>
+
+                <button type="button" onclick="resetToDefaults()" class="w-full py-3 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium text-sm rounded-xl transition flex items-center justify-between">
+                    <span><i class="fa-solid fa-rotate-left mr-2 text-rose-500" aria-hidden="true"></i> Restablecer lista de fábrica</span>
+                    <i class="fa-solid fa-chevron-right text-xs text-rose-300" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación -->
+    <div id="toast" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:bottom-5 sm:max-w-sm z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" role="status" aria-live="polite">
+        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm">
+            <i class="fa-solid fa-circle-check text-emerald-400 shrink-0" aria-hidden="true"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- ============== LÓGICA ============== -->
+    <script>
+        // Datos iniciales
+        const DEFAULT_GIFTS = [
+            // Higiene
+            { id: '1', name: 'Kit de aseo (cortauñas, aspirador, termómetro)', category: 'Higiene', icon: '🛁', desc: 'Kit de cuidado personal completo', priority: true, claimedBy: null, note: null },
+            { id: '2', name: 'Productos de baño neutros (jabón, champú)', category: 'Higiene', icon: '🧴', desc: 'Hipoalergénico sin fragancia', priority: false, claimedBy: null, note: null },
+            { id: '3', name: 'Toallas con capucha y capas de baño', category: 'Higiene', icon: '🐣', desc: 'De felpa suave', priority: false, claimedBy: null, note: null },
+            { id: '4', name: 'Bañera para bebé plegable o ergonómica', category: 'Higiene', icon: '🛁', desc: 'Con soporte para recién nacido', priority: true, claimedBy: null, note: null },
+
+            // Pañales
+            { id: '5', name: 'Pañales talla 1 (etapa 1)', category: 'Pañales', icon: '👶', desc: 'Paquete de pañales etapa inicial', priority: true, claimedBy: null, note: null },
+            { id: '6', name: 'Pañales talla 2 y 3', category: 'Pañales', icon: '📦', desc: 'Varias etapas para los siguientes meses', priority: false, claimedBy: null, note: null },
+            { id: '7', name: 'Toallitas húmedas sin alcohol (pack)', category: 'Pañales', icon: '🧻', desc: 'Packs de toallitas sensibles', priority: true, claimedBy: null, note: null },
+            { id: '8', name: 'Cambiador portátil impermeable', category: 'Pañales', icon: '🧺', desc: 'Plegable para bolso', priority: false, claimedBy: null, note: null },
+            { id: '9', name: 'Contenedor / cubo especial para pañales', category: 'Pañales', icon: '🗑️', desc: 'Para aislar malos olores', priority: false, claimedBy: null, note: null },
+
+            // Ropa
+            { id: '10', name: 'Bodys manga corta y larga (0-3M)', category: 'Ropa', icon: '👕', desc: 'Algodón suave 100%', priority: true, claimedBy: null, note: null },
+            { id: '11', name: 'Pijamas con cierre de cremallera', category: 'Ropa', icon: '🌙', desc: 'Tallas 0-3 y 3-6 meses', priority: true, claimedBy: null, note: null },
+            { id: '12', name: 'Gorritos, mitones y calcetines', category: 'Ropa', icon: '🧦', desc: 'Sets de algodón suave', priority: false, claimedBy: null, note: null },
+            { id: '13', name: 'Baberos impermeables y de tela', category: 'Ropa', icon: '👶', desc: 'Pack variado', priority: false, claimedBy: null, note: null },
+            { id: '14', name: 'Muselinas de algodón o bambú', category: 'Ropa', icon: '🌾', desc: 'Para arrullar o cubrir', priority: true, claimedBy: null, note: null },
+
+            // Alimentación
+            { id: '15', name: 'Cojín de lactancia ergonómico', category: 'Alimentación', icon: '🤱', desc: 'Para mayor comodidad', priority: true, claimedBy: null, note: null },
+            { id: '16', name: 'Extractor de leche (eléctrico / manual)', category: 'Alimentación', icon: '🍼', desc: 'Kit de extracción', priority: true, claimedBy: null, note: null },
+            { id: '17', name: 'Set de biberones anticólicos', category: 'Alimentación', icon: '🍼', desc: 'Diferentes tamaños', priority: false, claimedBy: null, note: null },
+            { id: '18', name: 'Esterilizador y escobilla de biberones', category: 'Alimentación', icon: '🧽', desc: 'Para microondas o eléctrico', priority: false, claimedBy: null, note: null },
+
+            // Sueño
+            { id: '19', name: 'Cuna de colecho o moisés portátil', category: 'Sueño', icon: '🛏️', desc: 'Ajustable a la cama', priority: true, claimedBy: null, note: null },
+            { id: '20', name: 'Juego de sábanas para cuna', category: 'Sueño', icon: '🛏️', desc: 'Sábanas ajustables de algodón', priority: false, claimedBy: null, note: null },
+            { id: '21', name: 'Luz de noche y máquina de ruido blanco', category: 'Sueño', icon: '💡', desc: 'Para facilitar el sueño', priority: false, claimedBy: null, note: null },
+            { id: '22', name: 'Sacos de dormir (swaddles)', category: 'Sueño', icon: '💤', desc: 'Con cremallera o velcro', priority: false, claimedBy: null, note: null },
+
+            // Paseo
+            { id: '23', name: 'Silla de auto (grupo 0+)', category: 'Paseo', icon: '🚗', desc: 'Para recién nacido, homologada', priority: true, claimedBy: null, note: null },
+            { id: '24', name: 'Fular elástico o mochila portabebés', category: 'Paseo', icon: '🎒', desc: 'Portabebés ergonómico', priority: true, claimedBy: null, note: null },
+            { id: '25', name: 'Bolso / mochila pañalera para coche', category: 'Paseo', icon: '👜', desc: 'Con compartimentos y cambiador', priority: false, claimedBy: null, note: null },
+            { id: '26', name: 'Espejo retrovisor para coche', category: 'Paseo', icon: '🪞', desc: 'Para vigilar al bebé en el auto', priority: false, claimedBy: null, note: null },
+
+            // Entretenimiento y varios
+            { id: '27', name: 'Gimnasio o manta de actividades', category: 'Entretenimiento', icon: '🎪', desc: 'Con arcos y juguetes colgantes', priority: false, claimedBy: null, note: null },
+            { id: '28', name: 'Móvil musical de cuna', category: 'Entretenimiento', icon: '🎵', desc: 'Con luces y melodías', priority: false, claimedBy: null, note: null },
+            { id: '29', name: 'Monitor o cámara de vigilancia', category: 'Varios', icon: '📹', desc: 'Monitor con audio y video', priority: true, claimedBy: null, note: null },
+            { id: '30', name: 'Sesión fotográfica de recién nacido', category: 'Varios', icon: '📷', desc: 'Bono para fotos profesionales', priority: false, claimedBy: null, note: null }
+        ];
+
+        const DEFAULT_EVENT = {
+            title: 'Baby Shower de Sofía',
+            subtitle: 'Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.',
+            date: 'Sábado, 18 de Noviembre • 4:00 PM',
+            location: 'Casa de los Abuelos / Salón de Eventos'
+        };
+
+        const CATEGORIES = ['Todas', 'Higiene', 'Pañales', 'Ropa', 'Alimentación', 'Sueño', 'Paseo', 'Entretenimiento', 'Varios'];
+        const STORAGE_KEYS = { gifts: 'babyShower_gifts', event: 'babyShower_event' };
+
+        // Estado
+        let gifts = [];
+        let eventDetails = { ...DEFAULT_EVENT };
+        let isAdminMode = false;
+        let selectedCategory = 'Todas';
+        let toastTimer = null;
+
+        // Copia profunda de los valores por defecto (evita mutar la constante original)
+        const cloneDefaults = () => JSON.parse(JSON.stringify(DEFAULT_GIFTS));
+
+        // Inicio
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            renderHeader();
+            renderCategoryFilters();
+            renderGrid();
+            bindEvents();
+        });
+
+        function bindEvents() {
+            document.getElementById('toggleAdminBtn').addEventListener('click', toggleMode);
+            document.getElementById('searchInput').addEventListener('input', renderGrid);
+            document.getElementById('giftGrid').addEventListener('click', onGridClick);
+            document.getElementById('categoryFilters').addEventListener('click', e => {
+                const btn = e.target.closest('[data-cat]');
+                if (btn) setCategory(btn.dataset.cat);
+            });
+            document.getElementById('importFileInput').addEventListener('change', importData);
+
+            // Cerrar modal al tocar el fondo oscuro o con la tecla Escape
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal.id); });
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal:not(.hidden)').forEach(m => closeModal(m.id));
+                }
+            });
+        }
+
+        // Almacenamiento local
+        function loadFromLocalStorage() {
+            try {
+                const savedGifts = JSON.parse(localStorage.getItem(STORAGE_KEYS.gifts));
+                const savedEvent = JSON.parse(localStorage.getItem(STORAGE_KEYS.event));
+                gifts = Array.isArray(savedGifts) ? savedGifts : cloneDefaults();
+                eventDetails = { ...DEFAULT_EVENT, ...(savedEvent || {}) };
+            } catch (err) {
+                // Datos dañados: volvemos a la lista original
+                gifts = cloneDefaults();
+                eventDetails = { ...DEFAULT_EVENT };
+            }
+        }
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.gifts, JSON.stringify(gifts));
+                localStorage.setItem(STORAGE_KEYS.event, JSON.stringify(eventDetails));
+            } catch (err) {
+                showToast('No se pudo guardar en este navegador');
+            }
+            updateStats();
+        }
+
+        // Modo organizador / invitado
+        function toggleMode() {
+            isAdminMode = !isAdminMode;
+
+            const badge = document.getElementById('currentModeBadge');
+            const btn = document.getElementById('toggleAdminBtn');
+            const btnText = document.getElementById('toggleAdminBtnText');
+
+            badge.textContent = isAdminMode ? 'Organizador' : 'Invitado';
+            badge.className = isAdminMode
+                ? 'px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold'
+                : 'px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold';
+            btnText.textContent = isAdminMode ? 'Ver como invitado' : 'Modo organizador';
+            btn.setAttribute('aria-pressed', String(isAdminMode));
+
+            ['adminBanner', 'editEventBtn', 'adminSettingsBtn'].forEach(id => {
+                document.getElementById(id).classList.toggle('hidden', !isAdminMode);
+            });
+
+            renderGrid();
+            showToast(isAdminMode ? 'Modo organizador activado' : 'Vista de invitado activada');
+        }
+
+        // Encabezado
+        function renderHeader() {
+            document.getElementById('displayTitle').textContent = eventDetails.title;
+            document.getElementById('displaySubtitle').textContent = eventDetails.subtitle;
+            document.getElementById('displayDate').textContent = eventDetails.date;
+            document.getElementById('displayLocation').textContent = eventDetails.location;
+            document.title = `${eventDetails.title} - Mesa de Regalos`;
+        }
+
+        // Categorías
+        function renderCategoryFilters() {
+            document.getElementById('categoryFilters').innerHTML = CATEGORIES.map(cat => {
+                const active = selectedCategory === cat;
+                return `
+                    <button type="button" data-cat="${escapeHtml(cat)}" aria-pressed="${active}"
+                        class="px-3.5 py-1.5 rounded-xl font-medium transition whitespace-nowrap border ${active
+                            ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'}">
+                        ${escapeHtml(cat)}
+                    </button>`;
+            }).join('');
+        }
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            renderCategoryFilters();
+            renderGrid();
+        }
+
+        // Cuadrícula
+        function getFilteredGifts() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            return gifts.filter(item => {
+                const matchesCategory = selectedCategory === 'Todas' || item.category === selectedCategory;
+                const matchesSearch = item.name.toLowerCase().includes(keyword) ||
+                                      (item.desc || '').toLowerCase().includes(keyword);
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('giftGrid');
+            const list = getFilteredGifts();
+
+            document.getElementById('emptyState').classList.toggle('hidden', list.length > 0);
+            grid.innerHTML = list.map(renderCard).join('');
+            updateStats();
+        }
+
+        // Un solo listener para todos los botones de las tarjetas (más seguro y rápido)
+        function onGridClick(e) {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            const { action, id } = btn.dataset;
+            if (action === 'reserve') openReserveModal(id);
+            if (action === 'unclaim') unclaimItem(id);
+            if (action === 'edit') openEditItemModal(id);
+            if (action === 'delete') deleteItem(id);
+        }
+
+        function renderIcon(icon) {
+            const value = (icon || '').trim();
+            // Permite iconos de Font Awesome escritos como "fa-baby" (solo letras, números y guiones)
+            if (/^fa-[a-z0-9-]+$/.test(value)) {
+                return `<i class="fa-solid ${value} text-2xl text-rose-500" aria-hidden="true"></i>`;
+            }
+            return `<span class="text-2xl leading-none" aria-hidden="true">${escapeHtml(value || '🎁')}</span>`;
+        }
+
+        function renderCard(item) {
+            const claimed = !!item.claimedBy;
+            const id = escapeHtml(item.id);
+
+            const priorityBadge = item.priority ? `
+                <span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-star text-amber-500" aria-hidden="true"></i> Deseado
+                </span>` : '';
+
+            const footer = claimed ? `
+                <div class="w-full text-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100">
+                        <span class="font-medium flex items-center gap-1.5 min-w-0">
+                            <i class="fa-solid fa-check-circle text-emerald-500" aria-hidden="true"></i>
+                            Regalo de: <strong class="break-words">${escapeHtml(item.claimedBy)}</strong>
+                        </span>
+                        ${isAdminMode ? `
+                            <button type="button" data-action="unclaim" data-id="${id}" class="text-xs text-slate-500 hover:text-rose-600 underline underline-offset-2">
+                                Liberar
+                            </button>` : ''}
+                    </div>
+                    ${item.note ? `<p class="text-[11px] text-slate-500 italic mt-1 px-1 break-words">"${escapeHtml(item.note)}"</p>` : ''}
+                </div>` : `
+                <div class="w-full flex items-center justify-between gap-2">
+                    <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span> Disponible
+                    </span>
+                    ${!isAdminMode ? `
+                        <button type="button" data-action="reserve" data-id="${id}" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs rounded-xl shadow-sm transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-gift" aria-hidden="true"></i> Regalar
+                        </button>` : ''}
+                </div>`;
+
+            const adminControls = isAdminMode ? `
+                <div class="flex justify-end gap-1 mt-3 pt-3 border-t border-slate-100">
+                    <button type="button" data-action="edit" data-id="${id}" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition" aria-label="Editar ${escapeHtml(item.name)}" title="Editar">
+                        <i class="fa-solid fa-pen text-xs" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" data-action="delete" data-id="${id}" class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" aria-label="Eliminar ${escapeHtml(item.name)}" title="Eliminar">
+                        <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
+                    </button>
+                </div>` : '';
+
+            return `
+                <article class="bg-white rounded-2xl border p-5 flex flex-col justify-between transition ${claimed
+                    ? 'border-slate-200 bg-slate-50/70'
+                    : 'border-slate-200 shadow-sm hover:shadow-md'}">
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2 min-w-0">
+                                ${renderIcon(item.icon)}
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide whitespace-nowrap ${getCategoryBadgeColor(item.category)}">
+                                    ${escapeHtml(item.category)}
+                                </span>
+                            </div>
+                            ${priorityBadge}
+                        </div>
+
+                        <h3 class="font-bold text-slate-800 text-base mb-1 break-words ${claimed ? 'line-through text-slate-500' : ''}">
+                            ${escapeHtml(item.name)}
+                        </h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4 break-words">
+                            ${escapeHtml(item.desc || 'Sin descripción adicional.')}
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 mt-auto">
+                        ${footer}
+                        ${adminControls}
+                    </div>
+                </article>`;
+        }
+
+        function getCategoryBadgeColor(cat) {
+            switch (cat) {
+                case 'Higiene': return 'bg-sky-50 text-sky-700 border border-sky-200';
+                case 'Pañales': return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                case 'Ropa': return 'bg-purple-50 text-purple-700 border border-purple-200';
+                case 'Alimentación': return 'bg-amber-50 text-amber-700 border border-amber-200';
+                case 'Sueño': return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+                case 'Paseo': return 'bg-rose-50 text-rose-700 border border-rose-200';
+                case 'Entretenimiento': return 'bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-200';
+                default: return 'bg-slate-100 text-slate-700 border border-slate-200';
+            }
+        }
+
+        // Contadores
+        function updateStats() {
+            const total = gifts.length;
+            const claimed = gifts.filter(i => i.claimedBy).length;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statAvailable').textContent = total - claimed;
+            document.getElementById('statClaimed').textContent = claimed;
+        }
+
+        // Reservar regalo (invitados)
+        function openReserveModal(id) {
+            const item = gifts.find(g => g.id === id);
+            if (!item || item.claimedBy) return;
+
+            document.getElementById('reserveItemId').value = item.id;
+            document.getElementById('reserveItemName').textContent = item.name;
+            document.getElementById('guestNameInput').value = '';
+            document.getElementById('guestNoteInput').value = '';
+            openModal('reserveModal');
+        }
+
+        function handleReserveSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('reserveItemId').value;
+            const name = document.getElementById('guestNameInput').value.trim();
+            const note = document.getElementById('guestNoteInput').value.trim();
+
+            const item = gifts.find(g => g.id === id);
+            if (!item) return;
+            if (item.claimedBy) {
+                showToast('Este regalo ya fue reservado por alguien más');
+                closeModal('reserveModal');
+                renderGrid();
+                return;
+            }
+
+            item.claimedBy = name;
+            item.note = note || null;
+            saveToLocalStorage();
+            renderGrid();
+            closeModal('reserveModal');
+            showToast(`¡Muchas gracias, ${name}! Tu regalo se ha registrado.`);
+        }
+
+        function unclaimItem(id) {
+            const item = gifts.find(g => g.id === id);
+            if (item && confirm('¿Deseas volver a dejar este artículo como disponible?')) {
+                item.claimedBy = null;
+                item.note = null;
+                saveToLocalStorage();
+                renderGrid();
+                showToast('Artículo disponible nuevamente');
+            }
+        }
+
+        // Añadir / editar / eliminar artículos (organizador)
+        function openAddItemModal() {
+            document.getElementById('itemModalTitle').textContent = 'Añadir nuevo artículo';
+            document.getElementById('editItemId').value = '';
+            document.getElementById('itemTitleInput').value = '';
+            document.getElementById('itemCategoryInput').value = 'Higiene';
+            document.getElementById('itemIconInput').value = '🎁';
+            document.getElementById('itemDescInput').value = '';
+            document.getElementById('itemPriorityInput').checked = false;
+            openModal('itemModal');
+        }
+
+        function openEditItemModal(id) {
+            const item = gifts.find(g => g.id === id);
+            if (!item) return;
+
+            document.getElementById('itemModalTitle').textContent = 'Editar artículo';
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('itemTitleInput').value = item.name;
+            document.getElementById('itemCategoryInput').value = item.category;
+            document.getElementById('itemIconInput').value = item.icon || '🎁';
+            document.getElementById('itemDescInput').value = item.desc || '';
+            document.getElementById('itemPriorityInput').checked = !!item.priority;
+            openModal('itemModal');
+        }
+
+        function handleItemSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editItemId').value;
+            const data = {
+                name: document.getElementById('itemTitleInput').value.trim(),
+                category: document.getElementById('itemCategoryInput').value,
+                icon: document.getElementById('itemIconInput').value.trim() || '🎁',
+                desc: document.getElementById('itemDescInput').value.trim(),
+                priority: document.getElementById('itemPriorityInput').checked
+            };
+
+            if (id) {
+                const item = gifts.find(g => g.id === id);
+                if (item) Object.assign(item, data);
+            } else {
+                gifts.unshift({ id: Date.now().toString(), ...data, claimedBy: null, note: null });
+            }
+
+            saveToLocalStorage();
+            renderGrid();
+            closeModal('itemModal');
+            showToast(id ? 'Artículo actualizado' : 'Nuevo artículo añadido');
+        }
+
+        function deleteItem(id) {
+            const item = gifts.find(g => g.id === id);
+            if (item && confirm(`¿Eliminar "${item.name}" de la lista?`)) {
+                gifts = gifts.filter(g => g.id !== id);
+                saveToLocalStorage();
+                renderGrid();
+                showToast('Artículo eliminado');
+            }
+        }
+
+        // Detalles del evento (organizador)
+        function openEditEventModal() {
+            document.getElementById('eventTitleInput').value = eventDetails.title;
+            document.getElementById('eventSubtitleInput').value = eventDetails.subtitle;
+            document.getElementById('eventDateInput').value = eventDetails.date;
+            document.getElementById('eventLocationInput').value = eventDetails.location;
+            openModal('eventModal');
+        }
+
+        function handleEventSubmit(e) {
+            e.preventDefault();
+            eventDetails = {
+                title: document.getElementById('eventTitleInput').value.trim() || DEFAULT_EVENT.title,
+                subtitle: document.getElementById('eventSubtitleInput').value.trim(),
+                date: document.getElementById('eventDateInput').value.trim(),
+                location: document.getElementById('eventLocationInput').value.trim()
+            };
+            saveToLocalStorage();
+            renderHeader();
+            closeModal('eventModal');
+            showToast('Detalles del evento actualizados');
+        }
+
+        // Ayudas para modales (bloquean el scroll del fondo mientras hay uno abierto)
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+            modal.querySelector('input:not([type=hidden]):not([type=file]), textarea, select')?.focus();
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            const anyOpen = document.querySelector('.modal:not(.hidden)');
+            if (!anyOpen) document.body.classList.remove('overflow-hidden');
+        }
+
+        // Restablecer lista
+        function resetToDefaults() {
+            if (confirm('¿Deseas restaurar la lista original? Se perderán las personalizaciones y las reservas.')) {
+                gifts = cloneDefaults();
+                eventDetails = { ...DEFAULT_EVENT };
+                saveToLocalStorage();
+                renderHeader();
+                renderGrid();
+                closeModal('settingsModal');
+                showToast('Lista restaurada a los valores iniciales');
+            }
+        }
+
+        // Exportar / importar JSON
+        function exportData() {
+            const blob = new Blob([JSON.stringify({ gifts, eventDetails }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `baby_shower_registry_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function importData(e) {
+            const input = e.target;
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = evt => {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (!parsed || !Array.isArray(parsed.gifts)) throw new Error('formato');
+                    gifts = parsed.gifts;
+                    if (parsed.eventDetails) eventDetails = { ...DEFAULT_EVENT, ...parsed.eventDetails };
+                    saveToLocalStorage();
+                    renderHeader();
+                    renderGrid();
+                    closeModal('settingsModal');
+                    showToast('Datos importados con éxito');
+                } catch (err) {
+                    alert('El archivo no es una copia válida de la lista.');
+                }
+                input.value = ''; // permite volver a importar el mismo archivo
+            };
+            reader.readAsText(file);
+        }
+
+        // Notificaciones
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('opacity-0', 'translate-y-24', 'pointer-events-none');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-24', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Escapar HTML para evitar inyección de código
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
