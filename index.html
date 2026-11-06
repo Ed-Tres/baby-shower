@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-slate-50">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Mesa de regalos para el baby shower de Sofía. Elige un detalle y regálalo.">
-    <meta name="theme-color" content="#fdf8f6">
+    <meta name="description" content="Mesa de regalos para el baby shower de Bellum. Elige un detalle y regálalo.">
+    <meta name="theme-color" content="#F1D4AF">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Baby Shower de Sofía - Mesa de Regalos">
-    <meta property="og:description" content="Mesa de regalos para el baby shower de Sofía. Elige un detalle y regálalo.">
-    <title>Baby Shower de Sofía - Mesa de Regalos</title>
+    <meta property="og:title" content="Baby Shower de Bellum - Mesa de Regalos">
+    <meta property="og:description" content="Mesa de regalos para el baby shower de Bellum. Elige un detalle y regálalo.">
+    <title>Baby Shower de Bellum - Mesa de Regalos</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BC%3C/text%3E%3C/svg%3E">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +22,16 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    colors: {
+                        brand: {
+                            brown: '#774F38',
+                            coral: '#E08E79',
+                            peach: '#F1D4AF',
+                            cream: '#ECE5CE',
+                            mint: '#C5E0DC',
+                            ink: '#033649',
+                        }
+                    },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
                         fredoka: ['Fredoka', 'system-ui', 'sans-serif'],
@@ -34,28 +44,37 @@
     <style>
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        :focus-visible { outline: 3px solid #f43f5e; outline-offset: 2px; border-radius: 8px; }
+        :focus-visible { outline: 3px solid #E08E79; outline-offset: 2px; border-radius: 8px; }
+        /* Fondo del encabezado: coloca bosque.jpg en la misma carpeta que index.html */
+        .hero-bg {
+            background-color: #ECE5CE;
+            background-image:
+                linear-gradient(180deg, rgba(236, 229, 206, 0.55) 0%, rgba(236, 229, 206, 0.88) 100%),
+                url('bosque.jpg');
+            background-size: cover;
+            background-position: center;
+        }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
     </style>
 </head>
 
-<body class="min-h-full flex flex-col text-slate-800 bg-slate-50 font-sans antialiased pb-24">
+<body class="min-h-full flex flex-col text-brand-ink bg-brand-cream font-sans antialiased pb-24">
 <noscript>
     <p class="p-6 text-center">Esta página necesita JavaScript para mostrar la lista de regalos.</p>
 </noscript>
 
     <!-- Barra superior -->
-    <div class="sticky top-0 z-40 bg-slate-900 text-white shadow-md">
+    <div class="sticky top-0 z-40 bg-brand-ink text-brand-cream shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-2">
             <div class="flex items-center gap-2 min-w-0">
-                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true"></span>
-                <span class="font-medium text-slate-300">Modo de vista:</span>
-                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold">Invitado</span>
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint shrink-0" aria-hidden="true"></span>
+                <span class="font-medium text-brand-cream/80">Modo de vista:</span>
+                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-brand-coral/20 text-brand-peach border border-brand-coral/40 font-semibold">Invitado</span>
             </div>
             <div class="flex items-center gap-2 sm:gap-3">
-                <button id="toggleAdminBtn" type="button" aria-pressed="false" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow-sm">
+                <button id="toggleAdminBtn" type="button" aria-pressed="false" class="px-3 py-1.5 bg-brand-brown hover:bg-brand-coral text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                     <span id="toggleAdminBtnText">Modo organizador</span>
                 </button>
@@ -64,35 +83,31 @@
     </div>
 
     <!-- Encabezado -->
-    <header class="relative overflow-hidden bg-gradient-to-b from-rose-100 via-pink-50 to-slate-50 pt-8 sm:pt-10 pb-10 sm:pb-12 px-4 border-b border-rose-100">
-        <div class="absolute -top-10 -left-10 w-40 h-40 bg-pink-200/50 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
-        <div class="hidden sm:block absolute top-1/2 -right-10 w-56 h-56 bg-sky-200/40 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
-        <div class="absolute bottom-0 left-1/3 w-48 sm:w-64 h-48 sm:h-64 bg-amber-100/50 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
-
+    <header class="hero-bg relative overflow-hidden pt-10 sm:pt-14 pb-10 sm:pb-14 px-4 border-b border-brand-peach">
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <button id="editEventBtn" type="button" data-global="edit-event" class="hidden mb-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/80 hover:bg-white text-rose-700 text-xs font-semibold rounded-full shadow-sm border border-rose-200 transition">
+            <button id="editEventBtn" type="button" data-global="edit-event" class="hidden mb-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/80 hover:bg-white text-brand-brown text-xs font-semibold rounded-full shadow-sm border border-brand-peach transition">
                 <i class="fa-solid fa-pencil" aria-hidden="true"></i> Editar detalles del evento
             </button>
 
-            <span class="inline-block px-3 py-1 bg-white/80 text-rose-600 font-medium text-xs sm:text-sm rounded-full shadow-sm mb-3 tracking-wide uppercase">
+            <span class="inline-block px-3 py-1 bg-white/80 text-brand-brown font-medium text-xs sm:text-sm rounded-full shadow-sm mb-4 tracking-wide uppercase">
                 <i class="fa-solid fa-baby mr-1" aria-hidden="true"></i> ¡Celebrando la llegada!
             </span>
 
-            <h1 id="displayTitle" class="font-fredoka text-3xl sm:text-5xl md:text-6xl text-slate-800 tracking-tight font-bold mb-3 leading-tight break-words">Baby Shower de Sofía</h1>
+            <h1 id="displayTitle" class="font-fredoka text-3xl sm:text-5xl md:text-6xl text-brand-ink tracking-tight font-bold mb-3 leading-tight break-words drop-shadow-sm">Baby Shower de Bellum</h1>
 
-            <p id="displaySubtitle" class="text-slate-600 font-medium text-sm sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
+            <p id="displaySubtitle" class="text-brand-ink/80 font-medium text-sm sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
                 Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.
             </p>
 
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
-                <div class="bg-white/80 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
-                    <i class="fa-regular fa-calendar-check text-rose-500" aria-hidden="true"></i>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-brand-ink">
+                <div class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
+                    <i class="fa-regular fa-calendar-check text-brand-coral" aria-hidden="true"></i>
                     <span id="displayDate" class="font-semibold break-words">Sábado, 28 de Noviembre de 2026 • 4:00 PM</span>
                 </div>
-                <a id="displayLocation" href="#" target="_blank" rel="noopener" class="bg-white/80 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0 hover:bg-white transition">
-                    <i class="fa-solid fa-location-dot text-rose-500" aria-hidden="true"></i>
+                <a id="displayLocation" href="#" target="_blank" rel="noopener" class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0 hover:bg-white transition">
+                    <i class="fa-solid fa-location-dot text-brand-coral" aria-hidden="true"></i>
                     <span id="displayLocationText" class="font-semibold break-words">P.H. Colinas del Lago, Calle 5, Casa 112</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400" aria-hidden="true"></i>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-brand-brown/70" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
@@ -102,728 +117,16 @@
     <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8 flex-grow">
 
         <!-- Panel del organizador -->
-        <section id="adminBanner" class="hidden mb-6 sm:mb-8 p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-2xl shadow-sm" aria-label="Panel del organizador">
+        <section id="adminBanner" class="hidden mb-6 sm:mb-8 p-4 sm:p-5 bg-white border border-brand-coral rounded-2xl shadow-sm" aria-label="Panel del organizador">
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
                 <div class="min-w-0">
-                    <h2 class="font-bold text-amber-900 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-user-gear text-amber-600" aria-hidden="true"></i> Panel de administración
+                    <h2 class="font-bold text-brand-brown text-base flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-brand-coral" aria-hidden="true"></i> Panel de administración
                     </h2>
-                    <p id="adminEmail" class="text-xs sm:text-sm text-amber-800 mt-1 break-all"></p>
+                    <p id="adminEmail" class="text-xs sm:text-sm text-brand-ink/70 mt-1 break-all"></p>
                 </div>
                 <div class="grid grid-cols-2 sm:flex gap-2">
-                    <button type="button" data-global="add-item" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 col-span-2 sm:col-span-1">
+                    <button type="button" data-global="add-item" class="px-4 py-2.5 bg-brand-brown hover:bg-brand-coral text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 col-span-2 sm:col-span-1">
                         <i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir artículo
                     </button>
-                    <button type="button" data-global="restore" class="px-3 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium text-xs rounded-xl transition flex items-center justify-center gap-1.5" title="Cargar la lista original">
-                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Cargar lista inicial
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Búsqueda y filtros -->
-        <section class="mb-6 sm:mb-8 space-y-4" aria-label="Buscar y filtrar regalos">
-            <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                <label class="relative w-full sm:w-80">
-                    <span class="sr-only">Buscar un regalo</span>
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" aria-hidden="true"></i>
-                    <input type="search" id="searchInput" placeholder="Buscar un regalo..." autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 shadow-sm transition">
-                </label>
-                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs sm:text-sm" role="status" aria-live="polite">
-                    <div class="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm whitespace-nowrap">Total: <span id="statTotal" class="font-bold text-slate-800">0</span></div>
-                    <div class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-100 shadow-sm whitespace-nowrap">Disponibles: <span id="statAvailable" class="font-bold">0</span></div>
-                    <div class="px-3 py-1.5 bg-rose-50 text-rose-800 rounded-lg border border-rose-100 shadow-sm whitespace-nowrap">Reservados: <span id="statClaimed" class="font-bold">0</span></div>
-                </div>
-            </div>
-            <div id="categoryFilters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs sm:text-sm" role="group" aria-label="Filtrar por categoría"></div>
-        </section>
-
-        <!-- Cuadrícula -->
-        <section aria-label="Lista de regalos">
-            <div id="loadingState" class="text-center py-12 text-slate-500 text-sm">Cargando la lista de regalos...</div>
-            <div id="giftGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
-            <div id="emptyState" class="hidden text-center py-12 sm:py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-6 sm:p-8 my-4">
-                <div class="w-16 h-16 bg-rose-50 text-rose-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl" aria-hidden="true">
-                    <i class="fa-solid fa-gift"></i>
-                </div>
-                <h2 id="emptyTitle" class="font-semibold text-slate-700 text-base">No se encontraron regalos</h2>
-                <p id="emptyText" class="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o selecciona otra categoría.</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Pie de página -->
-    <footer class="mt-12 sm:mt-16 bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
-        <div class="max-w-4xl mx-auto px-4 space-y-2">
-            <p class="font-medium text-slate-600">Baby Shower de Sofía • ¡Gracias por acompañarnos!</p>
-            <p class="text-slate-400">Las reservas se actualizan en tiempo real para todos.</p>
-        </div>
-    </footer>
-
-    <!-- Botón flotante de WhatsApp -->
-    <a href="https://wa.me/50761300188?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20el%20baby%20shower%20de%20Sofía"
-       target="_blank" rel="noopener"
-       class="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-40 flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-full shadow-lg px-4 h-14 transition"
-       aria-label="Escribir por WhatsApp">
-        <i class="fa-brands fa-whatsapp text-2xl" aria-hidden="true"></i>
-        <span class="hidden sm:inline text-sm">Escríbenos</span>
-    </a>
-
-    <!-- MODALES -->
-
-    <!-- Reservar regalo -->
-    <div id="reserveModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
-        <div role="dialog" aria-modal="true" aria-labelledby="reserveTitle" class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
-            <button type="button" data-close="reserveModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
-                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
-            </button>
-            <div class="text-center mb-5">
-                <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl" aria-hidden="true">
-                    <i class="fa-solid fa-gift"></i>
-                </div>
-                <h2 id="reserveTitle" class="font-bold text-lg text-slate-800">Regalar este artículo</h2>
-                <p id="reserveItemName" class="text-sm font-semibold text-rose-600 mt-1 break-words"></p>
-            </div>
-
-            <form id="reserveForm" class="space-y-4">
-                <input type="hidden" id="reserveItemId">
-                <button type="button" data-global="guest-google" class="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-google text-rose-500" aria-hidden="true"></i> Registrarme con Google (opcional)
-                </button>
-                <div>
-                    <label for="guestNameInput" class="block text-xs font-semibold text-slate-700 mb-1">Tu nombre completo *</label>
-                    <input type="text" id="guestNameInput" required maxlength="80" autocomplete="name" placeholder="Ej. María García" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                </div>
-                <div>
-                    <label for="guestNoteInput" class="block text-xs font-semibold text-slate-700 mb-1">Un mensaje con cariño (opcional)</label>
-                    <textarea id="guestNoteInput" rows="3" maxlength="300" placeholder="¡Muchas felicidades por la nueva integrante!" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
-                </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" data-close="reserveModal" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
-                    <button type="submit" id="reserveSubmit" class="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Confirmar regalo</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Añadir / editar artículo -->
-    <div id="itemModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
-        <div role="dialog" aria-modal="true" aria-labelledby="itemModalTitle" class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
-            <button type="button" data-close="itemModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
-                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
-            </button>
-            <h2 id="itemModalTitle" class="font-bold text-lg text-slate-800 mb-4 pr-8">Añadir nuevo artículo</h2>
-
-            <form id="itemForm" class="space-y-4">
-                <input type="hidden" id="editItemId">
-                <div>
-                    <label for="itemTitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Nombre del artículo *</label>
-                    <input type="text" id="itemTitleInput" required maxlength="120" placeholder="Ej. Cojín de lactancia" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label for="itemCategoryInput" class="block text-xs font-semibold text-slate-700 mb-1">Categoría</label>
-                        <select id="itemCategoryInput" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none bg-white">
-                            <option>Higiene</option><option>Pañales</option><option>Ropa</option><option>Alimentación</option>
-                            <option>Sueño</option><option>Paseo</option><option>Entretenimiento</option><option>Varios</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="itemIconInput" class="block text-xs font-semibold text-slate-700 mb-1">Icono / emoji</label>
-                        <input type="text" id="itemIconInput" maxlength="30" placeholder="Ej. 🍼 o fa-baby" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label for="itemDescInput" class="block text-xs font-semibold text-slate-700 mb-1">Descripción / notas</label>
-                    <textarea id="itemDescInput" rows="2" maxlength="250" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
-                </div>
-                <label class="flex items-center gap-2 py-1 cursor-pointer">
-                    <input type="checkbox" id="itemPriorityInput" class="w-4 h-4 rounded text-rose-600 focus:ring-rose-400">
-                    <span class="text-xs font-semibold text-slate-700">Marcar como "Imprescindible / prioritario"</span>
-                </label>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" data-close="itemModal" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Guardar artículo</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Editar detalles del evento -->
-    <div id="eventModal" class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
-        <div role="dialog" aria-modal="true" aria-labelledby="eventModalTitle" class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[90vh] overflow-y-auto">
-            <button type="button" data-close="eventModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1" aria-label="Cerrar">
-                <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
-            </button>
-            <h2 id="eventModalTitle" class="font-bold text-lg text-slate-800 mb-4 pr-8">Editar detalles del evento</h2>
-            <form id="eventForm" class="space-y-4">
-                <div>
-                    <label for="eventTitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Título *</label>
-                    <input type="text" id="eventTitleInput" required maxlength="100" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                </div>
-                <div>
-                    <label for="eventSubtitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Mensaje de bienvenida</label>
-                    <textarea id="eventSubtitleInput" rows="3" maxlength="400" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label for="eventDateInput" class="block text-xs font-semibold text-slate-700 mb-1">Fecha y hora</label>
-                    <input type="text" id="eventDateInput" maxlength="100" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                </div>
-                <div>
-                    <label for="eventLocationInput" class="block text-xs font-semibold text-slate-700 mb-1">Lugar / dirección</label>
-                    <input type="text" id="eventLocationInput" maxlength="150" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
-                </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" data-close="eventModal" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">Cancelar</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-xl shadow-sm transition">Guardar cambios</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Notificación (arriba para no tapar el botón de WhatsApp) -->
-    <div id="toast" class="fixed top-4 left-4 right-4 sm:left-auto sm:right-5 sm:top-5 sm:max-w-sm z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" role="status" aria-live="polite">
-        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm">
-            <i class="fa-solid fa-circle-info text-rose-300 shrink-0" aria-hidden="true"></i>
-            <span id="toastMessage"></span>
-        </div>
-    </div>
-
-    <!-- ============== LÓGICA ============== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import {
-            getFirestore, collection, doc, query, orderBy, onSnapshot, setDoc, updateDoc,
-            deleteDoc, getDocs, writeBatch, runTransaction, addDoc
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import {
-            getAuth, onAuthStateChanged, signInAnonymously, signInWithPopup,
-            GoogleAuthProvider, signOut
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // ===== CONFIGURACIÓN (edita estos dos valores) =====
-        const firebaseConfig = {
-           apiKey: "AIzaSyARTvakiwQYN1j8eVJGxRbncH-dAZUykcE",
-  authDomain: "baby-shower-c63e8.firebaseapp.com",
-  projectId: "baby-shower-c63e8",
-  storageBucket: "baby-shower-c63e8.firebasestorage.app",
-  messagingSenderId: "197185663475",
-  appId: "1:197185663475:web:976a667168ea37de32e286",
-  measurementId: "G-0EELDZ1Q8Q"
-        };
-        const ADMIN_EMAIL = "edertib@gmail.com";
-
-        // ===== DATOS =====
-        const DEFAULT_GIFTS = [
-            { id: '1', name: 'Kit de aseo (cortauñas, aspirador, termómetro)', category: 'Higiene', icon: '🛁', desc: 'Kit de cuidado personal completo', priority: true },
-            { id: '2', name: 'Productos de baño neutros (jabón, champú)', category: 'Higiene', icon: '🧴', desc: 'Hipoalergénico sin fragancia', priority: false },
-            { id: '3', name: 'Toallas con capucha y capas de baño', category: 'Higiene', icon: '🐣', desc: 'De felpa suave', priority: false },
-            { id: '4', name: 'Bañera para bebé plegable o ergonómica', category: 'Higiene', icon: '🛁', desc: 'Con soporte para recién nacido', priority: true },
-            { id: '5', name: 'Pañales talla 1 (etapa 1)', category: 'Pañales', icon: '👶', desc: 'Paquete de pañales etapa inicial', priority: true },
-            { id: '6', name: 'Pañales talla 2 y 3', category: 'Pañales', icon: '📦', desc: 'Varias etapas para los siguientes meses', priority: false },
-            { id: '7', name: 'Toallitas húmedas sin alcohol (pack)', category: 'Pañales', icon: '🧻', desc: 'Packs de toallitas sensibles', priority: true },
-            { id: '8', name: 'Cambiador portátil impermeable', category: 'Pañales', icon: '🧺', desc: 'Plegable para bolso', priority: false },
-            { id: '9', name: 'Contenedor / cubo especial para pañales', category: 'Pañales', icon: '🗑️', desc: 'Para aislar malos olores', priority: false },
-            { id: '10', name: 'Bodys manga corta y larga (0-3M)', category: 'Ropa', icon: '👕', desc: 'Algodón suave 100%', priority: true },
-            { id: '11', name: 'Pijamas con cierre de cremallera', category: 'Ropa', icon: '🌙', desc: 'Tallas 0-3 y 3-6 meses', priority: true },
-            { id: '12', name: 'Gorritos, mitones y calcetines', category: 'Ropa', icon: '🧦', desc: 'Sets de algodón suave', priority: false },
-            { id: '13', name: 'Baberos impermeables y de tela', category: 'Ropa', icon: '👶', desc: 'Pack variado', priority: false },
-            { id: '14', name: 'Muselinas de algodón o bambú', category: 'Ropa', icon: '🌾', desc: 'Para arrullar o cubrir', priority: true },
-            { id: '15', name: 'Cojín de lactancia ergonómico', category: 'Alimentación', icon: '🤱', desc: 'Para mayor comodidad', priority: true },
-            { id: '16', name: 'Extractor de leche (eléctrico / manual)', category: 'Alimentación', icon: '🍼', desc: 'Kit de extracción', priority: true },
-            { id: '17', name: 'Set de biberones anticólicos', category: 'Alimentación', icon: '🍼', desc: 'Diferentes tamaños', priority: false },
-            { id: '18', name: 'Esterilizador y escobilla de biberones', category: 'Alimentación', icon: '🧽', desc: 'Para microondas o eléctrico', priority: false },
-            { id: '19', name: 'Cuna de colecho o moisés portátil', category: 'Sueño', icon: '🛏️', desc: 'Ajustable a la cama', priority: true },
-            { id: '20', name: 'Juego de sábanas para cuna', category: 'Sueño', icon: '🛏️', desc: 'Sábanas ajustables de algodón', priority: false },
-            { id: '21', name: 'Luz de noche y máquina de ruido blanco', category: 'Sueño', icon: '💡', desc: 'Para facilitar el sueño', priority: false },
-            { id: '22', name: 'Sacos de dormir (swaddles)', category: 'Sueño', icon: '💤', desc: 'Con cremallera o velcro', priority: false },
-            { id: '23', name: 'Silla de auto (grupo 0+)', category: 'Paseo', icon: '🚗', desc: 'Para recién nacido, homologada', priority: true },
-            { id: '24', name: 'Fular elástico o mochila portabebés', category: 'Paseo', icon: '🎒', desc: 'Portabebés ergonómico', priority: true },
-            { id: '25', name: 'Bolso / mochila pañalera para coche', category: 'Paseo', icon: '👜', desc: 'Con compartimentos y cambiador', priority: false },
-            { id: '26', name: 'Espejo retrovisor para coche', category: 'Paseo', icon: '🪞', desc: 'Para vigilar al bebé en el auto', priority: false },
-            { id: '27', name: 'Gimnasio o manta de actividades', category: 'Entretenimiento', icon: '🎪', desc: 'Con arcos y juguetes colgantes', priority: false },
-            { id: '28', name: 'Móvil musical de cuna', category: 'Entretenimiento', icon: '🎵', desc: 'Con luces y melodías', priority: false },
-            { id: '29', name: 'Monitor o cámara de vigilancia', category: 'Varios', icon: '📹', desc: 'Monitor con audio y video', priority: true },
-            { id: '30', name: 'Sesión fotográfica de recién nacido', category: 'Varios', icon: '📷', desc: 'Bono para fotos profesionales', priority: false }
-        ];
-
-        const DEFAULT_EVENT = {
-            title: 'Baby Shower de Sofía',
-            subtitle: 'Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.',
-            date: 'Sábado, 28 de Noviembre de 2026 • 4:00 PM',
-            location: 'P.H. Colinas del Lago, Calle 5, Casa 112'
-        };
-
-        const CATEGORIES = ['Todas', 'Higiene', 'Pañales', 'Ropa', 'Alimentación', 'Sueño', 'Paseo', 'Entretenimiento', 'Varios'];
-
-        // ===== FIREBASE =====
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
-        googleProvider.setCustomParameters({ prompt: 'select_account' });
-
-        // ===== ESTADO =====
-        let gifts = [];
-        let eventDetails = { ...DEFAULT_EVENT };
-        let currentUser = null;
-        let isAdminMode = false;
-        let selectedCategory = 'Todas';
-        let loaded = false;
-        let toastTimer = null;
-
-        const isAdmin = user => !!user && !user.isAnonymous && user.email === ADMIN_EMAIL && user.emailVerified;
-
-        // ===== AUTENTICACIÓN =====
-        onAuthStateChanged(auth, async user => {
-            if (!user) {
-                // Todo visitante tiene una sesión anónima para poder reservar sin registrarse
-                try { await signInAnonymously(auth); } catch (err) { showToast('No se pudo conectar. Recarga la página.'); }
-                return;
-            }
-            currentUser = user;
-            isAdminMode = isAdmin(user);
-            updateAdminUI();
-            renderGrid();
-        });
-
-        async function toggleAdmin() {
-            if (isAdminMode) {
-                await signOut(auth);
-                showToast('Saliste del modo organizador');
-                return;
-            }
-            try {
-                const { user } = await signInWithPopup(auth, googleProvider);
-                if (isAdmin(user)) {
-                    showToast('Modo organizador activado');
-                } else {
-                    await signOut(auth);
-                    showToast('Esta cuenta no tiene permisos de organizador');
-                }
-            } catch (err) {
-                if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-                    showToast('No se pudo iniciar sesión. Intenta de nuevo.');
-                }
-            }
-        }
-
-        async function guestGoogleSignIn() {
-            try {
-                const { user } = await signInWithPopup(auth, googleProvider);
-                if (!document.getElementById('guestNameInput').value) {
-                    document.getElementById('guestNameInput').value = user.displayName || '';
-                }
-            } catch (err) {
-                if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-                    showToast('No se pudo iniciar sesión con Google');
-                }
-            }
-        }
-
-        function updateAdminUI() {
-            const badge = document.getElementById('currentModeBadge');
-            const btn = document.getElementById('toggleAdminBtn');
-            const btnText = document.getElementById('toggleAdminBtnText');
-
-            badge.textContent = isAdminMode ? 'Organizador' : 'Invitado';
-            badge.className = isAdminMode
-                ? 'px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold'
-                : 'px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold';
-            btnText.textContent = isAdminMode ? 'Salir del modo organizador' : 'Modo organizador';
-            btn.setAttribute('aria-pressed', String(isAdminMode));
-            document.getElementById('adminBanner').classList.toggle('hidden', !isAdminMode);
-            document.getElementById('editEventBtn').classList.toggle('hidden', !isAdminMode);
-            document.getElementById('adminEmail').textContent = isAdminMode ? `Sesión: ${currentUser.email}` : '';
-        }
-
-        // ===== DATOS EN TIEMPO REAL =====
-        onSnapshot(query(collection(db, 'gifts'), orderBy('order')), snap => {
-            gifts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            loaded = true;
-            document.getElementById('loadingState').classList.add('hidden');
-            renderGrid();
-        }, () => {
-            document.getElementById('loadingState').textContent = 'No se pudo cargar la lista. Recarga la página.';
-        });
-
-        onSnapshot(doc(db, 'settings', 'event'), snap => {
-            eventDetails = { ...DEFAULT_EVENT, ...(snap.exists() ? snap.data() : {}) };
-            renderHeader();
-        });
-
-        // ===== RENDER =====
-        function renderHeader() {
-            document.getElementById('displayTitle').textContent = eventDetails.title;
-            document.getElementById('displaySubtitle').textContent = eventDetails.subtitle;
-            document.getElementById('displayDate').textContent = eventDetails.date;
-            document.getElementById('displayLocationText').textContent = eventDetails.location;
-            document.getElementById('displayLocation').href =
-                'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(eventDetails.location);
-            document.title = `${eventDetails.title} - Mesa de Regalos`;
-        }
-
-        function renderCategoryFilters() {
-            document.getElementById('categoryFilters').innerHTML = CATEGORIES.map(cat => {
-                const active = selectedCategory === cat;
-                return `<button type="button" data-cat="${escapeHtml(cat)}" aria-pressed="${active}"
-                    class="px-3.5 py-1.5 rounded-xl font-medium transition whitespace-nowrap border ${active
-                        ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'}">${escapeHtml(cat)}</button>`;
-            }).join('');
-        }
-
-        function getFilteredGifts() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            return gifts.filter(item => {
-                const okCat = selectedCategory === 'Todas' || item.category === selectedCategory;
-                const okSearch = item.name.toLowerCase().includes(keyword) || (item.desc || '').toLowerCase().includes(keyword);
-                return okCat && okSearch;
-            });
-        }
-
-        function renderGrid() {
-            const list = getFilteredGifts();
-            const empty = document.getElementById('emptyState');
-            if (loaded && gifts.length === 0) {
-                document.getElementById('emptyTitle').textContent = 'La lista aún no está cargada';
-                document.getElementById('emptyText').textContent = isAdminMode
-                    ? 'Usa "Cargar lista inicial" en el panel de organizador.'
-                    : 'Vuelve pronto, la lista de regalos se está preparando.';
-            } else {
-                document.getElementById('emptyTitle').textContent = 'No se encontraron regalos';
-                document.getElementById('emptyText').textContent = 'Prueba con otra búsqueda o selecciona otra categoría.';
-            }
-            empty.classList.toggle('hidden', list.length > 0 || !loaded);
-            document.getElementById('giftGrid').innerHTML = list.map(renderCard).join('');
-            updateStats();
-        }
-
-        function renderCard(item) {
-            const claimed = !!item.claimedBy;
-            const id = escapeHtml(item.id);
-
-            const priorityBadge = item.priority ? `
-                <span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0">
-                    <i class="fa-solid fa-star text-amber-500" aria-hidden="true"></i> Deseado
-                </span>` : '';
-
-            const footer = claimed ? `
-                <div class="w-full text-xs">
-                    <div class="flex flex-wrap items-center justify-between gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100">
-                        <span class="font-medium flex items-center gap-1.5 min-w-0">
-                            <i class="fa-solid fa-check-circle text-emerald-500" aria-hidden="true"></i>
-                            Regalo de: <strong class="break-words">${escapeHtml(item.claimedBy)}</strong>
-                        </span>
-                        ${isAdminMode ? `<button type="button" data-action="unclaim" data-id="${id}" class="text-xs text-slate-500 hover:text-rose-600 underline underline-offset-2">Liberar</button>` : ''}
-                    </div>
-                    ${item.note ? `<p class="text-[11px] text-slate-500 italic mt-1 px-1 break-words">"${escapeHtml(item.note)}"</p>` : ''}
-                </div>` : `
-                <div class="w-full flex items-center justify-between gap-2">
-                    <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span> Disponible
-                    </span>
-                    ${!isAdminMode ? `
-                        <button type="button" data-action="reserve" data-id="${id}" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs rounded-xl shadow-sm transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-gift" aria-hidden="true"></i> Regalar
-                        </button>` : ''}
-                </div>`;
-
-            const adminControls = isAdminMode ? `
-                <div class="flex justify-end gap-1 mt-3 pt-3 border-t border-slate-100">
-                    <button type="button" data-action="edit" data-id="${id}" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition" aria-label="Editar ${escapeHtml(item.name)}">
-                        <i class="fa-solid fa-pen text-xs" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" data-action="delete" data-id="${id}" class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" aria-label="Eliminar ${escapeHtml(item.name)}">
-                        <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
-                    </button>
-                </div>` : '';
-
-            return `
-                <article class="bg-white rounded-2xl border p-5 flex flex-col justify-between transition ${claimed
-                    ? 'border-slate-200 bg-slate-50/70'
-                    : 'border-slate-200 shadow-sm hover:shadow-md'}">
-                    <div>
-                        <div class="flex items-start justify-between gap-2 mb-3">
-                            <div class="flex items-center gap-2 min-w-0">
-                                ${renderIcon(item.icon)}
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide whitespace-nowrap ${getCategoryBadgeColor(item.category)}">${escapeHtml(item.category)}</span>
-                            </div>
-                            ${priorityBadge}
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-base mb-1 break-words ${claimed ? 'line-through text-slate-500' : ''}">${escapeHtml(item.name)}</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-4 break-words">${escapeHtml(item.desc || 'Sin descripción adicional.')}</p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-100 mt-auto">
-                        ${footer}
-                        ${adminControls}
-                    </div>
-                </article>`;
-        }
-
-        function renderIcon(icon) {
-            const value = (icon || '').trim();
-            if (/^fa-[a-z0-9-]+$/.test(value)) {
-                return `<i class="fa-solid ${value} text-2xl text-rose-500" aria-hidden="true"></i>`;
-            }
-            return `<span class="text-2xl leading-none" aria-hidden="true">${escapeHtml(value || '🎁')}</span>`;
-        }
-
-        function getCategoryBadgeColor(cat) {
-            switch (cat) {
-                case 'Higiene': return 'bg-sky-50 text-sky-700 border border-sky-200';
-                case 'Pañales': return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-                case 'Ropa': return 'bg-purple-50 text-purple-700 border border-purple-200';
-                case 'Alimentación': return 'bg-amber-50 text-amber-700 border border-amber-200';
-                case 'Sueño': return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
-                case 'Paseo': return 'bg-rose-50 text-rose-700 border border-rose-200';
-                case 'Entretenimiento': return 'bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-200';
-                default: return 'bg-slate-100 text-slate-700 border border-slate-200';
-            }
-        }
-
-        function updateStats() {
-            const total = gifts.length;
-            const claimed = gifts.filter(i => i.claimedBy).length;
-            document.getElementById('statTotal').textContent = total;
-            document.getElementById('statAvailable').textContent = total - claimed;
-            document.getElementById('statClaimed').textContent = claimed;
-        }
-
-        // ===== RESERVAR (invitados) =====
-        function openReserveModal(id) {
-            const item = gifts.find(g => g.id === id);
-            if (!item || item.claimedBy) {
-                showToast('Este regalo ya fue reservado');
-                return;
-            }
-            document.getElementById('reserveItemId').value = item.id;
-            document.getElementById('reserveItemName').textContent = item.name;
-            document.getElementById('guestNameInput').value = currentUser && !currentUser.isAnonymous ? (currentUser.displayName || '') : '';
-            document.getElementById('guestNoteInput').value = '';
-            openModal('reserveModal');
-        }
-
-        async function handleReserve(e) {
-            e.preventDefault();
-            const id = document.getElementById('reserveItemId').value;
-            const name = document.getElementById('guestNameInput').value.trim();
-            const note = document.getElementById('guestNoteInput').value.trim();
-            const submit = document.getElementById('reserveSubmit');
-            submit.disabled = true;
-
-            try {
-                const ref = doc(db, 'gifts', id);
-                await runTransaction(db, async tx => {
-                    const snap = await tx.get(ref);
-                    if (!snap.exists()) throw new Error('missing');
-                    if (snap.data().claimedBy) throw new Error('taken');
-                    tx.update(ref, { claimedBy: name, note: note || null });
-                });
-                closeModal('reserveModal');
-                showToast(`¡Muchas gracias, ${name}! Tu regalo se ha registrado.`);
-            } catch (err) {
-                if (err.message === 'taken') {
-                    showToast('Este regalo acaba de ser reservado por alguien más');
-                    closeModal('reserveModal');
-                } else {
-                    showToast('No se pudo guardar la reserva. Revisa tu conexión.');
-                }
-            } finally {
-                submit.disabled = false;
-            }
-        }
-
-        // ===== ORGANIZADOR =====
-        async function unclaimItem(id) {
-            if (!isAdminMode || !confirm('¿Deseas dejar este artículo disponible otra vez?')) return;
-            await updateDoc(doc(db, 'gifts', id), { claimedBy: null, note: null });
-            showToast('Artículo disponible nuevamente');
-        }
-
-        function openAddItemModal() {
-            document.getElementById('itemModalTitle').textContent = 'Añadir nuevo artículo';
-            document.getElementById('editItemId').value = '';
-            document.getElementById('itemTitleInput').value = '';
-            document.getElementById('itemCategoryInput').value = 'Higiene';
-            document.getElementById('itemIconInput').value = '🎁';
-            document.getElementById('itemDescInput').value = '';
-            document.getElementById('itemPriorityInput').checked = false;
-            openModal('itemModal');
-        }
-
-        function openEditItemModal(id) {
-            const item = gifts.find(g => g.id === id);
-            if (!item) return;
-            document.getElementById('itemModalTitle').textContent = 'Editar artículo';
-            document.getElementById('editItemId').value = item.id;
-            document.getElementById('itemTitleInput').value = item.name;
-            document.getElementById('itemCategoryInput').value = item.category;
-            document.getElementById('itemIconInput').value = item.icon || '🎁';
-            document.getElementById('itemDescInput').value = item.desc || '';
-            document.getElementById('itemPriorityInput').checked = !!item.priority;
-            openModal('itemModal');
-        }
-
-        async function handleItemSubmit(e) {
-            e.preventDefault();
-            if (!isAdminMode) return;
-            const id = document.getElementById('editItemId').value;
-            const data = {
-                name: document.getElementById('itemTitleInput').value.trim(),
-                category: document.getElementById('itemCategoryInput').value,
-                icon: document.getElementById('itemIconInput').value.trim() || '🎁',
-                desc: document.getElementById('itemDescInput').value.trim(),
-                priority: document.getElementById('itemPriorityInput').checked
-            };
-            try {
-                if (id) {
-                    await updateDoc(doc(db, 'gifts', id), data);
-                    showToast('Artículo actualizado');
-                } else {
-                    // Orden negativo: los artículos nuevos aparecen primero
-                    await addDoc(collection(db, 'gifts'), { ...data, order: -Date.now(), claimedBy: null, note: null });
-                    showToast('Nuevo artículo añadido');
-                }
-                closeModal('itemModal');
-            } catch (err) {
-                showToast('No se pudo guardar el artículo');
-            }
-        }
-
-        async function deleteItem(id) {
-            const item = gifts.find(g => g.id === id);
-            if (!item || !isAdminMode || !confirm(`¿Eliminar "${item.name}" de la lista?`)) return;
-            await deleteDoc(doc(db, 'gifts', id));
-            showToast('Artículo eliminado');
-        }
-
-        // Carga la lista original (reemplaza los artículos por defecto y restablece sus reservas)
-        async function restoreDefaultList() {
-            if (!isAdminMode) return;
-            if (!confirm('¿Cargar la lista original? Se reemplazarán los artículos iniciales y se borrarán sus reservas.')) return;
-            try {
-                const defaultIds = new Set(DEFAULT_GIFTS.map(g => `gift-${g.id}`));
-                const existing = await getDocs(collection(db, 'gifts'));
-                const batch = writeBatch(db);
-                existing.forEach(d => { if (!defaultIds.has(d.id)) batch.delete(d.ref); });
-                DEFAULT_GIFTS.forEach(({ id, ...data }) => {
-                    batch.set(doc(db, 'gifts', `gift-${id}`), { ...data, claimedBy: null, note: null, order: Number(id) });
-                });
-                await batch.commit();
-                showToast('Lista original cargada');
-            } catch (err) {
-                showToast('No se pudo cargar la lista');
-            }
-        }
-
-        function openEditEventModal() {
-            if (!isAdminMode) return;
-            document.getElementById('eventTitleInput').value = eventDetails.title;
-            document.getElementById('eventSubtitleInput').value = eventDetails.subtitle;
-            document.getElementById('eventDateInput').value = eventDetails.date;
-            document.getElementById('eventLocationInput').value = eventDetails.location;
-            openModal('eventModal');
-        }
-
-        async function handleEventSubmit(e) {
-            e.preventDefault();
-            if (!isAdminMode) return;
-            const data = {
-                title: document.getElementById('eventTitleInput').value.trim() || DEFAULT_EVENT.title,
-                subtitle: document.getElementById('eventSubtitleInput').value.trim(),
-                date: document.getElementById('eventDateInput').value.trim(),
-                location: document.getElementById('eventLocationInput').value.trim()
-            };
-            try {
-                await setDoc(doc(db, 'settings', 'event'), data);
-                closeModal('eventModal');
-                showToast('Detalles del evento actualizados');
-            } catch (err) {
-                showToast('No se pudo guardar los cambios');
-            }
-        }
-
-        // ===== EVENTOS DE LA PÁGINA =====
-        document.getElementById('toggleAdminBtn').addEventListener('click', toggleAdmin);
-        document.getElementById('searchInput').addEventListener('input', renderGrid);
-        document.getElementById('reserveForm').addEventListener('submit', handleReserve);
-        document.getElementById('itemForm').addEventListener('submit', handleItemSubmit);
-        document.getElementById('eventForm').addEventListener('submit', handleEventSubmit);
-
-        document.getElementById('categoryFilters').addEventListener('click', e => {
-            const btn = e.target.closest('[data-cat]');
-            if (!btn) return;
-            selectedCategory = btn.dataset.cat;
-            renderCategoryFilters();
-            renderGrid();
-        });
-
-        document.getElementById('giftGrid').addEventListener('click', e => {
-            const btn = e.target.closest('[data-action]');
-            if (!btn) return;
-            const { action, id } = btn.dataset;
-            if (action === 'reserve') openReserveModal(id);
-            if (action === 'unclaim') unclaimItem(id);
-            if (action === 'edit') openEditItemModal(id);
-            if (action === 'delete') deleteItem(id);
-        });
-
-        document.addEventListener('click', e => {
-            const close = e.target.closest('[data-close]');
-            if (close) return closeModal(close.dataset.close);
-
-            const global = e.target.closest('[data-global]');
-            if (!global) return;
-            const action = global.dataset.global;
-            if (action === 'add-item') openAddItemModal();
-            if (action === 'edit-event') openEditEventModal();
-            if (action === 'restore') restoreDefaultList();
-            if (action === 'guest-google') guestGoogleSignIn();
-        });
-
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal.id); });
-        });
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') document.querySelectorAll('.modal:not(.hidden)').forEach(m => closeModal(m.id));
-        });
-
-        // ===== AYUDAS =====
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.classList.add('overflow-hidden');
-            modal.querySelector('input:not([type=hidden]), textarea, select')?.focus();
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            if (!document.querySelector('.modal:not(.hidden)')) document.body.classList.remove('overflow-hidden');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = msg;
-            toast.classList.remove('opacity-0', '-translate-y-24', 'pointer-events-none');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-24', 'pointer-events-none');
-            }, 3000);
-        }
-
-        function escapeHtml(str) {
-            if (str === null || str === undefined) return '';
-            return String(str)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-        }
-
-        renderCategoryFilters();
-        renderHeader();
-    </script>
-</body>
-</html>
+                    <button type="button" data-global="restore" class="px-3 py-2.5 bg-brand-cream hover:bg-brand-peach
