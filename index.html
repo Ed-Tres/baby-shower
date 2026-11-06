@@ -1,132 +1,69 @@
-<!DOCTYPE html>
-<html lang="es" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Mesa de regalos para el baby shower de Bellum. Elige un detalle y regálalo.">
-    <meta name="theme-color" content="#F1D4AF">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Baby Shower de Bellum - Mesa de Regalos">
-    <meta property="og:description" content="Mesa de regalos para el baby shower de Bellum. Elige un detalle y regálalo.">
-    <title>Baby Shower de Bellum - Mesa de Regalos</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BC%3C/text%3E%3C/svg%3E">
+const PROJECT_ID = 'baby-shower-c63e8';
+const API_KEY = 'AIzaSyARTvakiwQYN1j8eVJGxRbncH-dAZUykcE';
+const EMAIL_DESTINO = 'edertib@gmail.com';
+const FECHA_EVENTO = new Date('2026-11-28T23:59:00-05:00');
+const URL_LISTA = 'https://ed-tres.github.io/baby-shower/';
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+// Lee los regalos de Firestore y devuelve solo los que no están reservados
+function regalosPendientes() {
+  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/gifts?pageSize=300&key=${API_KEY}`;
+  const respuesta = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+  const documentos = respuesta.documents || [];
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            brown: '#774F38',
-                            coral: '#E08E79',
-                            peach: '#F1D4AF',
-                            cream: '#ECE5CE',
-                            mint: '#C5E0DC',
-                            ink: '#033649',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        fredoka: ['Fredoka', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+  return documentos
+    .map(d => {
+      const f = d.fields;
+      return {
+        nombre: f.name ? f.name.stringValue : '',
+        categoria: f.category ? f.category.stringValue : '',
+        reservado: !!(f.claimedBy && f.claimedBy.stringValue),
+        enlace: f.link && f.link.stringValue ? f.link.stringValue : ''
+      };
+    })
+    .filter(g => !g.reservado);
+}
 
-    <style>
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        :focus-visible { outline: 3px solid #E08E79; outline-offset: 2px; border-radius: 8px; }
-        /* Fondo del encabezado: coloca bosque.jpg en la misma carpeta que index.html */
-        .hero-bg {
-            background-color: #ECE5CE;
-            background-image:
-                linear-gradient(180deg, rgba(236, 229, 206, 0.55) 0%, rgba(236, 229, 206, 0.88) 100%),
-                url('bosque.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-        }
-    </style>
-</head>
+// Función principal: se ejecuta cada domingo
+function recordatorioSemanal() {
+  if (new Date() > FECHA_EVENTO) {
+    eliminarDisparadores();
+    return;
+  }
 
-<body class="min-h-full flex flex-col text-brand-ink bg-brand-cream font-sans antialiased pb-24">
-<noscript>
-    <p class="p-6 text-center">Esta página necesita JavaScript para mostrar la lista de regalos.</p>
-</noscript>
+  const pendientes = regalosPendientes();
 
-    <!-- Barra superior -->
-    <div class="sticky top-0 z-40 bg-brand-ink text-brand-cream shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-2">
-            <div class="flex items-center gap-2 min-w-0">
-                <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint shrink-0" aria-hidden="true"></span>
-                <span class="font-medium text-brand-cream/80">Modo de vista:</span>
-                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-brand-coral/20 text-brand-peach border border-brand-coral/40 font-semibold">Invitado</span>
-            </div>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button id="toggleAdminBtn" type="button" aria-pressed="false" class="px-3 py-1.5 bg-brand-brown hover:bg-brand-coral text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-                    <span id="toggleAdminBtnText">Modo organizador</span>
-                </button>
-            </div>
-        </div>
-    </div>
+  if (pendientes.length === 0) {
+    MailApp.sendEmail(EMAIL_DESTINO,
+      'Baby shower de Bellum: ¡todos los regalos están reservados!',
+      'Ya no quedan regalos disponibles. ¡Gracias!');
+    return;
+  }
 
-    <!-- Encabezado -->
-    <header class="hero-bg relative overflow-hidden pt-10 sm:pt-14 pb-10 sm:pb-14 px-4 border-b border-brand-peach">
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <button id="editEventBtn" type="button" data-global="edit-event" class="hidden mb-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/80 hover:bg-white text-brand-brown text-xs font-semibold rounded-full shadow-sm border border-brand-peach transition">
-                <i class="fa-solid fa-pencil" aria-hidden="true"></i> Editar detalles del evento
-            </button>
+  let cuerpo = `Hola Eder,\n\nFaltan ${pendientes.length} regalos por reservar para el baby shower de Bellum (sábado 28 de noviembre de 2026):\n\n`;
+  pendientes.forEach(g => {
+    cuerpo += `• ${g.nombre} (${g.categoria})`;
+    if (g.enlace) cuerpo += `\n  ${g.enlace}`;
+    cuerpo += '\n';
+  });
+  cuerpo += `\nVer la lista completa: ${URL_LISTA}`;
 
-            <span class="inline-block px-3 py-1 bg-white/80 text-brand-brown font-medium text-xs sm:text-sm rounded-full shadow-sm mb-4 tracking-wide uppercase">
-                <i class="fa-solid fa-baby mr-1" aria-hidden="true"></i> ¡Celebrando la llegada!
-            </span>
+  MailApp.sendEmail(EMAIL_DESTINO,
+    `Baby shower de Bellum: faltan ${pendientes.length} regalos`,
+    cuerpo);
+}
 
-            <h1 id="displayTitle" class="font-fredoka text-3xl sm:text-5xl md:text-6xl text-brand-ink tracking-tight font-bold mb-3 leading-tight break-words drop-shadow-sm">Baby Shower de Bellum</h1>
+// Ejecutar UNA sola vez para crear el horario semanal
+function crearDisparador() {
+  eliminarDisparadores();
+  ScriptApp.newTrigger('recordatorioSemanal')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.SUNDAY)
+    .atHour(23)
+    .create();
+}
 
-            <p id="displaySubtitle" class="text-brand-ink/80 font-medium text-sm sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
-                Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.
-            </p>
-
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-brand-ink">
-                <div class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
-                    <i class="fa-regular fa-calendar-check text-brand-coral" aria-hidden="true"></i>
-                    <span id="displayDate" class="font-semibold break-words">Sábado, 28 de Noviembre de 2026 • 4:00 PM</span>
-                </div>
-                <a id="displayLocation" href="#" target="_blank" rel="noopener" class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0 hover:bg-white transition">
-                    <i class="fa-solid fa-location-dot text-brand-coral" aria-hidden="true"></i>
-                    <span id="displayLocationText" class="font-semibold break-words">P.H. Colinas del Lago, Calle 5, Casa 112</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-brand-brown/70" aria-hidden="true"></i>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Contenido principal -->
-    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8 flex-grow">
-
-        <!-- Panel del organizador -->
-        <section id="adminBanner" class="hidden mb-6 sm:mb-8 p-4 sm:p-5 bg-white border border-brand-coral rounded-2xl shadow-sm" aria-label="Panel del organizador">
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
-                <div class="min-w-0">
-                    <h2 class="font-bold text-brand-brown text-base flex items-center gap-2">
-                        <i class="fa-solid fa-user-gear text-brand-coral" aria-hidden="true"></i> Panel de administración
-                    </h2>
-                    <p id="adminEmail" class="text-xs sm:text-sm text-brand-ink/70 mt-1 break-all"></p>
-                </div>
-                <div class="grid grid-cols-2 sm:flex gap-2">
-                    <button type="button" data-global="add-item" class="px-4 py-2.5 bg-brand-brown hover:bg-brand-coral text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 col-span-2 sm:col-span-1">
-                        <i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir artículo
-                    </button>
-                    <button type="button" data-global="restore" class="px-3 py-2.5 bg-brand-cream hover:bg-brand-peach
+function eliminarDisparadores() {
+  ScriptApp.getProjectTriggers().forEach(t => {
+    if (t.getHandlerFunction() === 'recordatorioSemanal') ScriptApp.deleteTrigger(t);
+  });
+}
