@@ -69,21 +69,26 @@
 </noscript>
 
     <!-- Barra superior -->
-    <div class="sticky top-0 z-40 bg-brand-ink text-brand-cream shadow-md">
+     <!-- Barra superior (oculta para invitados) -->
+    <div id="topBar" class="hidden sticky top-0 z-40 bg-brand-ink text-brand-cream shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-sm gap-2">
             <div class="flex items-center gap-2 min-w-0">
                 <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint shrink-0" aria-hidden="true"></span>
                 <span class="font-medium text-brand-cream/80">Modo de vista:</span>
-                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-brand-coral/20 text-brand-peach border border-brand-coral/40 font-semibold">Invitado</span>
+                <span id="currentModeBadge" class="px-2 py-0.5 rounded-full bg-brand-coral/20 text-brand-peach border border-brand-coral/40 font-semibold">Organizador</span>
             </div>
             <div class="flex items-center gap-2 sm:gap-3">
                 <button id="toggleAdminBtn" type="button" aria-pressed="false" class="px-3 py-1.5 bg-brand-brown hover:bg-brand-coral text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-                    <span id="toggleAdminBtnText">Modo organizador</span>
+                    <span id="toggleAdminBtnText">Salir del modo organizador</span>
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Acceso discreto para la organizadora -->
+    <button id="adminAccess" type="button" aria-label="Acceso organizador" title="Acceso organizador"
+        class="fixed top-2 right-2 z-50 w-8 h-8 rounded-full opacity-10 hover:opacity-60 focus:opacity-60 transition"></button>
 
     <!-- Encabezado -->
     <header class="hero-bg relative overflow-hidden pt-10 sm:pt-14 pb-10 sm:pb-14 px-4 border-b border-brand-peach">
@@ -466,17 +471,18 @@
             }
         }
 
-        function updateAdminUI() {
+              function updateAdminUI() {
+            const topBar = document.getElementById('topBar');
             const badge = document.getElementById('currentModeBadge');
             const btn = document.getElementById('toggleAdminBtn');
             const btnText = document.getElementById('toggleAdminBtnText');
 
-            badge.textContent = isAdminMode ? 'Organizador' : 'Invitado';
-            badge.className = isAdminMode
-                ? 'px-2 py-0.5 rounded-full bg-brand-mint/30 text-brand-mint border border-brand-mint/50 font-semibold'
-                : 'px-2 py-0.5 rounded-full bg-brand-coral/20 text-brand-peach border border-brand-coral/40 font-semibold';
-            btnText.textContent = isAdminMode ? 'Salir del modo organizador' : 'Modo organizador';
+            // La barra solo se muestra cuando la organizadora ya inició sesión
+            topBar.classList.toggle('hidden', !isAdminMode);
+            badge.textContent = 'Organizador';
+            btnText.textContent = 'Salir del modo organizador';
             btn.setAttribute('aria-pressed', String(isAdminMode));
+
             document.getElementById('adminBanner').classList.toggle('hidden', !isAdminMode);
             document.getElementById('editEventBtn').classList.toggle('hidden', !isAdminMode);
             document.getElementById('adminEmail').textContent = isAdminMode ? `Sesión: ${currentUser.email}` : '';
@@ -843,6 +849,7 @@
 
         // ===== EVENTOS DE LA PÁGINA =====
         document.getElementById('toggleAdminBtn').addEventListener('click', toggleAdmin);
+        document.getElementById('adminAccess').addEventListener('click', toggleAdmin);
         document.getElementById('searchInput').addEventListener('input', renderGrid);
         document.getElementById('reserveForm').addEventListener('submit', handleReserve);
         document.getElementById('itemForm').addEventListener('submit', handleItemSubmit);
