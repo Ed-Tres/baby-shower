@@ -601,12 +601,15 @@
                         </button>` : ''}
                 </div>`;
 
-            const adminControls = isAdminMode ? `
+                       const adminControls = isAdminMode ? `
                 <div class="flex justify-end gap-1 mt-3 pt-3 border-t border-brand-peach">
-                    <button type="button" data-action="edit" data-id="${id}" class="p-2 text-brand-brown hover:bg-brand-cream rounded-lg transition" aria-label="Editar ${name}">
+                    <button type="button" data-action="duplicate" data-id="${id}" class="p-2 text-brand-brown hover:bg-brand-cream rounded-lg transition" aria-label="Duplicar ${name}" title="Duplicar">
+                        <i class="fa-solid fa-copy text-sm" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" data-action="edit" data-id="${id}" class="p-2 text-brand-brown hover:bg-brand-cream rounded-lg transition" aria-label="Editar ${name}" title="Editar">
                         <i class="fa-solid fa-pen text-sm" aria-hidden="true"></i>
                     </button>
-                    <button type="button" data-action="delete" data-id="${id}" class="p-2 text-brand-brown hover:text-brand-coral hover:bg-brand-cream rounded-lg transition" aria-label="Eliminar ${name}">
+                    <button type="button" data-action="delete" data-id="${id}" class="p-2 text-brand-brown hover:text-brand-coral hover:bg-brand-cream rounded-lg transition" aria-label="Eliminar ${name}" title="Eliminar">
                         <i class="fa-solid fa-trash text-sm" aria-hidden="true"></i>
                     </button>
                 </div>` : '';
