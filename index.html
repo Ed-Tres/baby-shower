@@ -152,6 +152,17 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-brown/60 text-sm pointer-events-none" aria-hidden="true"></i>
                     <input type="search" id="searchInput" placeholder="Buscar un regalo..." autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-brand-peach rounded-xl text-base placeholder:text-brand-ink/50 focus:outline-none focus:ring-2 focus:ring-brand-coral shadow-sm transition">
                 </label>
+                                <label class="flex items-center gap-2 text-sm font-semibold text-brand-ink whitespace-nowrap">
+                    Ordenar por:
+                    <select id="sortSelect" class="px-3 py-2 bg-white border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                        <option value="default">Orden de la lista</option>
+                        <option value="priority">Imprescindibles primero</option>
+                        <option value="priceAsc">Precio: menor a mayor</option>
+                        <option value="priceDesc">Precio: mayor a menor</option>
+                        <option value="nameAsc">Nombre (A-Z)</option>
+                        <option value="available">Disponibles primero</option>
+                    </select>
+                </label>
                 <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-sm" role="status" aria-live="polite">
                     <div class="px-3 py-1.5 bg-white rounded-lg border border-brand-peach shadow-sm whitespace-nowrap">Total: <span id="statTotal" class="font-bold">0</span></div>
                     <div class="px-3 py-1.5 bg-brand-mint text-brand-ink rounded-lg border border-brand-mint shadow-sm whitespace-nowrap">Disponibles: <span id="statAvailable" class="font-bold">0</span></div>
@@ -420,6 +431,7 @@
         let currentUser = null;
         let isAdminMode = false;
         let selectedCategory = 'Todas';
+        let sortBy = 'default';
         let loaded = false;
         let toastTimer = null;
 
@@ -524,13 +536,36 @@
             }).join('');
         }
 
-        function getFilteredGifts() {
+              function getFilteredGifts() {
             const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            return gifts.filter(item => {
+            const filtered = gifts.filter(item => {
                 const okCat = selectedCategory === 'Todas' || item.category === selectedCategory;
                 const okSearch = item.name.toLowerCase().includes(keyword) || (item.desc || '').toLowerCase().includes(keyword);
                 return okCat && okSearch;
             });
+            return sortGifts(filtered);
+        }
+
+        function sortGifts(list) {
+            const arr = [...list];
+            // Sin precio: al final en ambos sentidos
+            const priceAsc = g => (Number(g.price) > 0 ? Number(g.price) : Number.MAX_SAFE_INTEGER);
+            const priceDesc = g => (Number(g.price) > 0 ? Number(g.price) : -1);
+
+            switch (sortBy) {
+                case 'priority':
+                    return arr.sort((a, b) => (b.priority ? 1 : 0) - (a.priority ? 1 : 0));
+                case 'priceAsc':
+                    return arr.sort((a, b) => priceAsc(a) - priceAsc(b));
+                case 'priceDesc':
+                    return arr.sort((a, b) => priceDesc(b) - priceDesc(a));
+                case 'nameAsc':
+                    return arr.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+                case 'available':
+                    return arr.sort((a, b) => (a.claimedBy ? 1 : 0) - (b.claimedBy ? 1 : 0));
+                default:
+                    return arr;
+            }
         }
 
         function renderGrid() {
@@ -868,6 +903,10 @@
         document.getElementById('toggleAdminBtn').addEventListener('click', toggleAdmin);
         document.getElementById('adminAccess').addEventListener('click', toggleAdmin);
         document.getElementById('searchInput').addEventListener('input', renderGrid);
+                document.getElementById('sortSelect').addEventListener('change', e => {
+            sortBy = e.target.value;
+            renderGrid();
+        });
         document.getElementById('reserveForm').addEventListener('submit', handleReserve);
         document.getElementById('itemForm').addEventListener('submit', handleItemSubmit);
         document.getElementById('eventForm').addEventListener('submit', handleEventSubmit);
