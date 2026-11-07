@@ -23,14 +23,14 @@
             theme: {
                 extend: {
                     colors: {
-                         brand: {
-        ink: '#082F3A',
-        brown: '#0B6E83',
-        coral: '#10596B',
-        peach: '#A3EFF7',
-        cream: '#ECFCFE',
-        mint: '#98DED7',
-    }
+                        brand: {
+                            ink: '#082F3A',
+                            brown: '#0B6E83',
+                            coral: '#10596B',
+                            peach: '#A3EFF7',
+                            cream: '#ECFCFE',
+                            mint: '#98DED7',
+                        }
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -42,20 +42,21 @@
     </script>
 
     <style>
-
-    html { font-size: 18px; }
+        html { font-size: 18px; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-      :focus-visible { outline: 3px solid #0B6E83; outline-offset: 2px; border-radius: 8px; }
+        :focus-visible { outline: 3px solid #0B6E83; outline-offset: 2px; border-radius: 8px; }
 
-.hero-bg {
-    background-color: #ECFCFE;
-    background-image:
-        linear-gradient(180deg, rgba(236, 252, 254, 0.55) 0%, rgba(236, 252, 254, 0.88) 100%),
-        url('bosque.jpg');
-    background-size: cover;
-    background-position: center;
-}
+        /* Fondo del encabezado: forest.jpg debe estar en la misma carpeta que index.html */
+        .hero-bg {
+            background-color: #ECFCFE;
+            background-image:
+                linear-gradient(180deg, rgba(236, 252, 254, 0.25) 0%, rgba(236, 252, 254, 0.6) 100%),
+                url('forest.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
@@ -69,7 +70,7 @@
 
     <!-- Barra superior -->
     <div class="sticky top-0 z-40 bg-brand-ink text-brand-cream shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-2">
+        <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-sm gap-2">
             <div class="flex items-center gap-2 min-w-0">
                 <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint shrink-0" aria-hidden="true"></span>
                 <span class="font-medium text-brand-cream/80">Modo de vista:</span>
@@ -91,23 +92,23 @@
                 <i class="fa-solid fa-pencil" aria-hidden="true"></i> Editar detalles del evento
             </button>
 
-            <span class="inline-block px-3 py-1 bg-white/80 text-brand-brown font-medium text-xs sm:text-sm rounded-full shadow-sm mb-4 tracking-wide uppercase">
+            <span class="inline-block px-3 py-1 bg-white/85 text-brand-brown font-medium text-sm rounded-full shadow-sm mb-4 tracking-wide uppercase">
                 <i class="fa-solid fa-baby mr-1" aria-hidden="true"></i> ¡Celebrando la llegada!
             </span>
 
-            <h1 id="displayTitle" class="font-fredoka text-3xl sm:text-5xl md:text-6xl text-brand-ink tracking-tight font-bold mb-3 leading-tight break-words drop-shadow-sm">Baby Shower de Bellum</h1>
+            <h1 id="displayTitle" class="font-fredoka text-4xl sm:text-5xl md:text-6xl text-brand-ink tracking-tight font-bold mb-3 leading-tight break-words drop-shadow-sm">Baby Shower de Bellum</h1>
 
-            <p id="displaySubtitle" class="text-brand-ink/80 font-medium text-sm sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
+            <p id="displaySubtitle" class="text-brand-ink font-medium text-base sm:text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
                 Estamos muy felices de compartir este momento con ustedes. Aquí les dejamos una lista de detalles con los que pueden ayudarnos a recibir a nuestra bebé.
             </p>
 
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-brand-ink">
-                <div class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
-                    <i class="fa-regular fa-calendar-check text-brand-coral" aria-hidden="true"></i>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 text-sm text-brand-ink">
+                <div class="bg-white/90 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0">
+                    <i class="fa-regular fa-calendar-check text-brand-brown" aria-hidden="true"></i>
                     <span id="displayDate" class="font-semibold break-words">Sábado, 28 de Noviembre de 2026 • 4:00 PM</span>
                 </div>
-                <a id="displayLocation" href="#" target="_blank" rel="noopener" class="bg-white/85 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0 hover:bg-white transition">
-                    <i class="fa-solid fa-location-dot text-brand-coral" aria-hidden="true"></i>
+                <a id="displayLocation" href="#" target="_blank" rel="noopener" class="bg-white/90 px-4 py-2 rounded-xl shadow-sm flex items-center justify-center gap-2 min-w-0 hover:bg-white transition">
+                    <i class="fa-solid fa-location-dot text-brand-brown" aria-hidden="true"></i>
                     <span id="displayLocationText" class="font-semibold break-words">P.H. Colinas del Lago, Calle 5, Casa 112</span>
                     <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-brand-brown/70" aria-hidden="true"></i>
                 </a>
@@ -125,7 +126,7 @@
                     <h2 class="font-bold text-brand-brown text-base flex items-center gap-2">
                         <i class="fa-solid fa-user-gear text-brand-coral" aria-hidden="true"></i> Panel de administración
                     </h2>
-                    <p id="adminEmail" class="text-xs sm:text-sm text-brand-ink/70 mt-1 break-all"></p>
+                    <p id="adminEmail" class="text-sm text-brand-ink/70 mt-1 break-all"></p>
                 </div>
                 <div class="grid grid-cols-2 sm:flex gap-2">
                     <button type="button" data-global="add-item" class="px-4 py-2.5 bg-brand-brown hover:bg-brand-coral text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 col-span-2 sm:col-span-1">
@@ -144,33 +145,33 @@
                 <label class="relative w-full sm:w-80">
                     <span class="sr-only">Buscar un regalo</span>
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-brown/60 text-sm pointer-events-none" aria-hidden="true"></i>
-                    <input type="search" id="searchInput" placeholder="Buscar un regalo..." autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-brand-peach rounded-xl text-sm placeholder:text-brand-ink/50 focus:outline-none focus:ring-2 focus:ring-brand-coral shadow-sm transition">
+                    <input type="search" id="searchInput" placeholder="Buscar un regalo..." autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-brand-peach rounded-xl text-base placeholder:text-brand-ink/50 focus:outline-none focus:ring-2 focus:ring-brand-coral shadow-sm transition">
                 </label>
-                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs sm:text-sm" role="status" aria-live="polite">
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-sm" role="status" aria-live="polite">
                     <div class="px-3 py-1.5 bg-white rounded-lg border border-brand-peach shadow-sm whitespace-nowrap">Total: <span id="statTotal" class="font-bold">0</span></div>
                     <div class="px-3 py-1.5 bg-brand-mint text-brand-ink rounded-lg border border-brand-mint shadow-sm whitespace-nowrap">Disponibles: <span id="statAvailable" class="font-bold">0</span></div>
                     <div class="px-3 py-1.5 bg-brand-peach text-brand-brown rounded-lg border border-brand-peach shadow-sm whitespace-nowrap">Reservados: <span id="statClaimed" class="font-bold">0</span></div>
                 </div>
             </div>
-            <div id="categoryFilters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs sm:text-sm" role="group" aria-label="Filtrar por categoría"></div>
+            <div id="categoryFilters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-sm" role="group" aria-label="Filtrar por categoría"></div>
         </section>
 
         <!-- Cuadrícula -->
         <section aria-label="Lista de regalos">
-            <div id="loadingState" class="text-center py-12 text-brand-ink/70 text-sm">Cargando la lista de regalos...</div>
+            <div id="loadingState" class="text-center py-12 text-brand-ink/70 text-base">Cargando la lista de regalos...</div>
             <div id="giftGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
             <div id="emptyState" class="hidden text-center py-12 sm:py-16 bg-white rounded-2xl border border-dashed border-brand-brown/30 p-6 sm:p-8 my-4">
                 <div class="w-16 h-16 bg-brand-peach text-brand-brown rounded-full flex items-center justify-center mx-auto mb-3 text-2xl" aria-hidden="true">
                     <i class="fa-solid fa-gift"></i>
                 </div>
-                <h2 id="emptyTitle" class="font-semibold text-brand-ink text-base">No se encontraron regalos</h2>
-                <p id="emptyText" class="text-brand-ink/70 text-sm mt-1">Prueba con otra búsqueda o selecciona otra categoría.</p>
+                <h2 id="emptyTitle" class="font-semibold text-brand-ink text-lg">No se encontraron regalos</h2>
+                <p id="emptyText" class="text-brand-ink/70 text-base mt-1">Prueba con otra búsqueda o selecciona otra categoría.</p>
             </div>
         </section>
     </main>
 
     <!-- Pie de página -->
-    <footer class="mt-12 sm:mt-16 bg-white border-t border-brand-peach py-8 text-center text-xs text-brand-ink/70">
+    <footer class="mt-12 sm:mt-16 bg-white border-t border-brand-peach py-8 text-center text-sm text-brand-ink/70">
         <div class="max-w-4xl mx-auto px-4 space-y-2">
             <p class="font-medium text-brand-ink">Baby Shower de Bellum • ¡Gracias por acompañarnos!</p>
             <p>Las reservas se actualizan en tiempo real para todos.</p>
@@ -183,13 +184,12 @@
        class="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-40 flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-full shadow-lg px-4 h-14 transition"
        aria-label="Escribir por WhatsApp">
         <i class="fa-brands fa-whatsapp text-2xl" aria-hidden="true"></i>
-        <span class="hidden sm:inline text-sm">Escríbenos</span>
+        <span class="hidden sm:inline text-base">Escríbenos</span>
     </a>
 
     <!-- MODALES -->
 
     <!-- Reservar regalo -->
-       <!-- Reservar regalo -->
     <div id="reserveModal" data-nofocus class="modal fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-brand-ink/50 backdrop-blur-sm p-0 sm:p-4">
         <div role="dialog" aria-modal="true" aria-labelledby="reserveTitle" class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-xl relative max-h-[92vh] overflow-y-auto">
             <button type="button" data-close="reserveModal" class="absolute top-4 right-4 text-brand-ink/60 hover:text-brand-ink p-2" aria-label="Cerrar">
@@ -205,7 +205,8 @@
                     <div id="reserveIcon" class="hidden"></div>
                 </div>
                 <p id="reserveItemName" class="font-bold text-lg text-brand-ink text-center mb-2 break-words"></p>
-                <p id="reserveItemDesc" class="text-base text-brand-ink/80 text-center mb-4 break-words"></p>
+                <p id="reserveItemDesc" class="text-base text-brand-ink/80 text-center mb-2 break-words"></p>
+                <p id="reserveItemPrice" class="text-2xl font-bold text-brand-brown text-center mb-4"></p>
 
                 <a id="reserveAmazonBtn" href="#" target="_blank" rel="noopener" class="hidden w-full items-center justify-center gap-2 py-3.5 bg-brand-brown hover:bg-brand-coral text-white font-bold text-lg rounded-xl shadow-sm transition">
                     <i class="fa-brands fa-amazon text-xl" aria-hidden="true"></i> Comprar en Amazon
@@ -250,37 +251,41 @@
             <form id="itemForm" class="space-y-4">
                 <input type="hidden" id="editItemId">
                 <div>
-                    <label for="itemTitleInput" class="block text-xs font-semibold text-brand-ink mb-1">Nombre del artículo *</label>
-                    <input type="text" id="itemTitleInput" required maxlength="120" placeholder="Ej. Cojín de lactancia" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="itemTitleInput" class="block text-sm font-semibold text-brand-ink mb-1">Nombre del artículo *</label>
+                    <input type="text" id="itemTitleInput" required maxlength="120" placeholder="Ej. Cojín de lactancia" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label for="itemCategoryInput" class="block text-xs font-semibold text-brand-ink mb-1">Categoría</label>
-                        <select id="itemCategoryInput" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none bg-white">
+                        <label for="itemCategoryInput" class="block text-sm font-semibold text-brand-ink mb-1">Categoría</label>
+                        <select id="itemCategoryInput" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none bg-white">
                             <option>Higiene</option><option>Pañales</option><option>Ropa</option><option>Alimentación</option>
                             <option>Sueño</option><option>Paseo</option><option>Entretenimiento</option><option>Varios</option>
                         </select>
                     </div>
                     <div>
-                        <label for="itemIconInput" class="block text-xs font-semibold text-brand-ink mb-1">Icono / emoji</label>
-                        <input type="text" id="itemIconInput" maxlength="30" placeholder="Ej. 🍼 o fa-baby" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                        <label for="itemIconInput" class="block text-sm font-semibold text-brand-ink mb-1">Icono / emoji</label>
+                        <input type="text" id="itemIconInput" maxlength="30" placeholder="Ej. 🍼 o fa-baby" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                     </div>
                 </div>
                 <div>
-                    <label for="itemImageInput" class="block text-xs font-semibold text-brand-ink mb-1">Foto del producto (dirección de la imagen)</label>
-                    <input type="url" id="itemImageInput" maxlength="500" placeholder="https://..." class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="itemImageInput" class="block text-sm font-semibold text-brand-ink mb-1">Foto del producto (dirección de la imagen)</label>
+                    <input type="url" id="itemImageInput" maxlength="500" placeholder="https://..." class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div>
-                    <label for="itemLinkInput" class="block text-xs font-semibold text-brand-ink mb-1">Enlace del producto en Amazon</label>
-                    <input type="url" id="itemLinkInput" maxlength="500" placeholder="https://www.amazon.com/..." class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="itemLinkInput" class="block text-sm font-semibold text-brand-ink mb-1">Enlace del producto en Amazon</label>
+                    <input type="url" id="itemLinkInput" maxlength="500" placeholder="https://www.amazon.com/..." class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div>
-                    <label for="itemDescInput" class="block text-xs font-semibold text-brand-ink mb-1">Descripción / notas</label>
-                    <textarea id="itemDescInput" rows="2" maxlength="250" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none"></textarea>
+                    <label for="itemPriceInput" class="block text-sm font-semibold text-brand-ink mb-1">Precio en USD (ej. 24.99)</label>
+                    <input type="number" id="itemPriceInput" min="0" step="0.01" placeholder="24.99" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                </div>
+                <div>
+                    <label for="itemDescInput" class="block text-sm font-semibold text-brand-ink mb-1">Descripción / notas</label>
+                    <textarea id="itemDescInput" rows="2" maxlength="250" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none"></textarea>
                 </div>
                 <label class="flex items-center gap-2 py-1 cursor-pointer">
                     <input type="checkbox" id="itemPriorityInput" class="w-4 h-4 rounded text-brand-brown focus:ring-brand-coral">
-                    <span class="text-xs font-semibold text-brand-ink">Marcar como "Imprescindible / prioritario"</span>
+                    <span class="text-sm font-semibold text-brand-ink">Marcar como "Imprescindible / prioritario"</span>
                 </label>
                 <div class="flex gap-2 pt-2">
                     <button type="button" data-close="itemModal" class="w-1/2 py-2.5 bg-brand-cream hover:bg-brand-peach text-brand-ink text-sm font-medium rounded-xl transition">Cancelar</button>
@@ -299,20 +304,20 @@
             <h2 id="eventModalTitle" class="font-bold text-lg text-brand-ink mb-4 pr-8">Editar detalles del evento</h2>
             <form id="eventForm" class="space-y-4">
                 <div>
-                    <label for="eventTitleInput" class="block text-xs font-semibold text-brand-ink mb-1">Título *</label>
-                    <input type="text" id="eventTitleInput" required maxlength="100" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="eventTitleInput" class="block text-sm font-semibold text-brand-ink mb-1">Título *</label>
+                    <input type="text" id="eventTitleInput" required maxlength="100" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div>
-                    <label for="eventSubtitleInput" class="block text-xs font-semibold text-brand-ink mb-1">Mensaje de bienvenida</label>
-                    <textarea id="eventSubtitleInput" rows="3" maxlength="400" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none"></textarea>
+                    <label for="eventSubtitleInput" class="block text-sm font-semibold text-brand-ink mb-1">Mensaje de bienvenida</label>
+                    <textarea id="eventSubtitleInput" rows="3" maxlength="400" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none"></textarea>
                 </div>
                 <div>
-                    <label for="eventDateInput" class="block text-xs font-semibold text-brand-ink mb-1">Fecha y hora</label>
-                    <input type="text" id="eventDateInput" maxlength="100" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="eventDateInput" class="block text-sm font-semibold text-brand-ink mb-1">Fecha y hora</label>
+                    <input type="text" id="eventDateInput" maxlength="100" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div>
-                    <label for="eventLocationInput" class="block text-xs font-semibold text-brand-ink mb-1">Lugar / dirección</label>
-                    <input type="text" id="eventLocationInput" maxlength="150" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-brand-coral focus:outline-none">
+                    <label for="eventLocationInput" class="block text-sm font-semibold text-brand-ink mb-1">Lugar / dirección</label>
+                    <input type="text" id="eventLocationInput" maxlength="150" class="w-full px-3.5 py-2.5 border border-brand-peach rounded-xl text-base focus:ring-2 focus:ring-brand-coral focus:outline-none">
                 </div>
                 <div class="flex gap-2 pt-2">
                     <button type="button" data-close="eventModal" class="w-1/2 py-2.5 bg-brand-cream hover:bg-brand-peach text-brand-ink text-sm font-medium rounded-xl transition">Cancelar</button>
@@ -324,7 +329,7 @@
 
     <!-- Notificación -->
     <div id="toast" class="fixed top-4 left-4 right-4 sm:left-auto sm:right-5 sm:top-5 sm:max-w-sm z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" role="status" aria-live="polite">
-        <div class="bg-brand-ink text-brand-cream px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm">
+        <div class="bg-brand-ink text-brand-cream px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-base">
             <i class="fa-solid fa-circle-info text-brand-peach shrink-0" aria-hidden="true"></i>
             <span id="toastMessage"></span>
         </div>
@@ -539,9 +544,16 @@
             updateStats();
         }
 
-        // Solo acepta enlaces http/https (evita enlaces maliciosos)
+        // Solo acepta enlaces http/https
         function safeUrl(url) {
             return /^https?:\/\//i.test(url || '') ? escapeHtml(url) : '';
+        }
+
+        // Muestra el precio como $24.99. Si no hay precio, devuelve vacío.
+        function formatPrice(value) {
+            const n = Number(value);
+            if (value === '' || value === null || value === undefined || isNaN(n) || n <= 0) return '';
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
         }
 
         function renderCard(item) {
@@ -550,34 +562,35 @@
             const name = escapeHtml(item.name);
             const imageUrl = safeUrl(item.image);
             const amazonUrl = safeUrl(item.link);
+            const price = formatPrice(item.price);
 
             const priorityBadge = item.priority ? `
-                <span class="px-2 py-0.5 bg-brand-coral text-white rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0">
+                <span class="px-2 py-0.5 bg-brand-coral text-white rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1 shrink-0">
                     <i class="fa-solid fa-star" aria-hidden="true"></i> Deseado
                 </span>` : '';
 
             const amazonButton = amazonUrl ? `
-                <a href="${amazonUrl}" target="_blank" rel="noopener" class="mt-3 w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-brand-brown border border-brand-peach rounded-xl hover:bg-brand-cream transition">
+                <a href="${amazonUrl}" target="_blank" rel="noopener" class="mt-3 w-full inline-flex items-center justify-center gap-1.5 py-2 text-sm font-semibold text-brand-brown border border-brand-peach rounded-xl hover:bg-brand-cream transition">
                     <i class="fa-brands fa-amazon" aria-hidden="true"></i> Ver en Amazon
                 </a>` : '';
 
             const footer = claimed ? `
-                <div class="w-full text-xs">
+                <div class="w-full text-sm">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-brand-brown bg-brand-peach/50 px-3 py-2 rounded-xl border border-brand-peach">
                         <span class="font-medium flex items-center gap-1.5 min-w-0">
                             <i class="fa-solid fa-check-circle text-brand-brown" aria-hidden="true"></i>
                             Regalo de: <strong class="break-words">${escapeHtml(item.claimedBy)}</strong>
                         </span>
-                        ${isAdminMode ? `<button type="button" data-action="unclaim" data-id="${id}" class="text-xs text-brand-ink/70 hover:text-brand-coral underline underline-offset-2">Liberar</button>` : ''}
+                        ${isAdminMode ? `<button type="button" data-action="unclaim" data-id="${id}" class="text-sm text-brand-ink/70 hover:text-brand-coral underline underline-offset-2">Liberar</button>` : ''}
                     </div>
-                    ${item.note ? `<p class="text-[11px] text-brand-ink/70 italic mt-1 px-1 break-words">"${escapeHtml(item.note)}"</p>` : ''}
+                    ${item.note ? `<p class="text-sm text-brand-ink/70 italic mt-1 px-1 break-words">"${escapeHtml(item.note)}"</p>` : ''}
                 </div>` : `
                 <div class="w-full flex items-center justify-between gap-2">
-                    <span class="text-xs font-semibold text-brand-ink flex items-center gap-1.5">
+                    <span class="text-sm font-semibold text-brand-ink flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-brand-mint ring-1 ring-brand-ink/30" aria-hidden="true"></span> Disponible
                     </span>
                     ${!isAdminMode ? `
-                        <button type="button" data-action="reserve" data-id="${id}" class="px-3.5 py-2 bg-brand-brown hover:bg-brand-coral text-white font-medium text-xs rounded-xl shadow-sm transition flex items-center gap-1.5">
+                        <button type="button" data-action="reserve" data-id="${id}" class="px-3.5 py-2 bg-brand-brown hover:bg-brand-coral text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center gap-1.5">
                             <i class="fa-solid fa-gift" aria-hidden="true"></i> Regalar
                         </button>` : ''}
                 </div>`;
@@ -585,10 +598,10 @@
             const adminControls = isAdminMode ? `
                 <div class="flex justify-end gap-1 mt-3 pt-3 border-t border-brand-peach">
                     <button type="button" data-action="edit" data-id="${id}" class="p-2 text-brand-brown hover:bg-brand-cream rounded-lg transition" aria-label="Editar ${name}">
-                        <i class="fa-solid fa-pen text-xs" aria-hidden="true"></i>
+                        <i class="fa-solid fa-pen text-sm" aria-hidden="true"></i>
                     </button>
                     <button type="button" data-action="delete" data-id="${id}" class="p-2 text-brand-brown hover:text-brand-coral hover:bg-brand-cream rounded-lg transition" aria-label="Eliminar ${name}">
-                        <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
+                        <i class="fa-solid fa-trash text-sm" aria-hidden="true"></i>
                     </button>
                 </div>` : '';
 
@@ -603,11 +616,12 @@
                         </div>
 
                         <div class="flex items-start justify-between gap-2 mb-2">
-                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide whitespace-nowrap bg-brand-peach/60 text-brand-brown border border-brand-peach">${escapeHtml(item.category)}</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap bg-brand-peach/60 text-brand-brown border border-brand-peach">${escapeHtml(item.category)}</span>
                             ${priorityBadge}
                         </div>
-                        <h3 class="font-bold text-brand-ink text-base mb-1 break-words ${claimed ? 'line-through opacity-70' : ''}">${name}</h3>
-                        <p class="text-xs text-brand-ink/70 leading-relaxed mb-3 break-words">${escapeHtml(item.desc || 'Sin descripción adicional.')}</p>
+                        <h3 class="font-bold text-brand-ink text-lg mb-1 break-words ${claimed ? 'line-through opacity-70' : ''}">${name}</h3>
+                        ${price ? `<p class="text-lg font-bold text-brand-brown mb-2">${price}</p>` : ''}
+                        <p class="text-sm text-brand-ink/70 leading-relaxed mb-3 break-words">${escapeHtml(item.desc || 'Sin descripción adicional.')}</p>
                         ${amazonButton}
                     </div>
                     <div class="pt-3 border-t border-brand-peach mt-4">
@@ -644,6 +658,7 @@
             document.getElementById('reserveItemId').value = item.id;
             document.getElementById('reserveItemName').textContent = item.name;
             document.getElementById('reserveItemDesc').textContent = item.desc || '';
+            document.getElementById('reserveItemPrice').textContent = formatPrice(item.price);
             document.getElementById('guestNameInput').value = currentUser && !currentUser.isAnonymous ? (currentUser.displayName || '') : '';
             document.getElementById('guestNoteInput').value = '';
 
@@ -673,7 +688,37 @@
 
             openModal('reserveModal');
         }
-        
+
+        async function handleReserve(e) {
+            e.preventDefault();
+            const id = document.getElementById('reserveItemId').value;
+            const name = document.getElementById('guestNameInput').value.trim();
+            const note = document.getElementById('guestNoteInput').value.trim();
+            const submit = document.getElementById('reserveSubmit');
+            submit.disabled = true;
+
+            try {
+                const ref = doc(db, 'gifts', id);
+                await runTransaction(db, async tx => {
+                    const snap = await tx.get(ref);
+                    if (!snap.exists()) throw new Error('missing');
+                    if (snap.data().claimedBy) throw new Error('taken');
+                    tx.update(ref, { claimedBy: name, note: note || null });
+                });
+                closeModal('reserveModal');
+                showToast(`¡Muchas gracias, ${name}! Tu regalo se ha registrado.`);
+            } catch (err) {
+                if (err.message === 'taken') {
+                    showToast('Este regalo acaba de ser reservado por alguien más');
+                    closeModal('reserveModal');
+                } else {
+                    showToast('No se pudo guardar la reserva. Revisa tu conexión.');
+                }
+            } finally {
+                submit.disabled = false;
+            }
+        }
+
         // ===== ORGANIZADOR =====
         async function unclaimItem(id) {
             if (!isAdminMode || !confirm('¿Deseas dejar este artículo disponible otra vez?')) return;
@@ -689,6 +734,7 @@
             document.getElementById('itemIconInput').value = '🎁';
             document.getElementById('itemImageInput').value = '';
             document.getElementById('itemLinkInput').value = '';
+            document.getElementById('itemPriceInput').value = '';
             document.getElementById('itemDescInput').value = '';
             document.getElementById('itemPriorityInput').checked = false;
             openModal('itemModal');
@@ -704,6 +750,7 @@
             document.getElementById('itemIconInput').value = item.icon || '🎁';
             document.getElementById('itemImageInput').value = item.image || '';
             document.getElementById('itemLinkInput').value = item.link || '';
+            document.getElementById('itemPriceInput').value = item.price ?? '';
             document.getElementById('itemDescInput').value = item.desc || '';
             document.getElementById('itemPriorityInput').checked = !!item.priority;
             openModal('itemModal');
@@ -719,6 +766,7 @@
                 icon: document.getElementById('itemIconInput').value.trim() || '🎁',
                 image: document.getElementById('itemImageInput').value.trim(),
                 link: document.getElementById('itemLinkInput').value.trim(),
+                price: parseFloat(document.getElementById('itemPriceInput').value) || null,
                 desc: document.getElementById('itemDescInput').value.trim(),
                 priority: document.getElementById('itemPriorityInput').checked
             };
@@ -743,7 +791,7 @@
             showToast('Artículo eliminado');
         }
 
-        // Restaura los 30 artículos originales sin borrar las fotos ni enlaces que ya hayas añadido
+        // Restaura los 30 artículos originales sin borrar las fotos, enlaces ni precios que ya agregaste
         async function restoreDefaultList() {
             if (!isAdminMode) return;
             if (!confirm('¿Cargar la lista original? Se restablecerán los artículos iniciales y se borrarán sus reservas.')) return;
@@ -839,7 +887,7 @@
         });
 
         // ===== AYUDAS =====
-           function openModal(id) {
+        function openModal(id) {
             const modal = document.getElementById(id);
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -847,6 +895,7 @@
             if (!modal.hasAttribute('data-nofocus')) {
                 modal.querySelector('input:not([type=hidden]), textarea, select')?.focus();
             }
+        }
 
         function closeModal(id) {
             const modal = document.getElementById(id);
