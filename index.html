@@ -416,8 +416,7 @@
             location: 'P.H. Colinas del Lago, Calle 5, Casa 112'
         };
 
-        const CATEGORIES = ['Todas', 'Higiene', 'Pañales', 'Ropa', 'Alimentación', 'Sueño', 'Paseo', 'Entretenimiento', 'Varios'];
-
+const CATEGORIES = ['Todas', 'Higiene', 'Pañales', 'Ropa', 'Alimentación', 'Sueño', 'Paseo', 'Entretenimiento', 'Varios', 'Reservados'];
         // ===== FIREBASE =====
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -527,19 +526,24 @@
         }
 
         function renderCategoryFilters() {
+            const claimedCount = gifts.filter(g => g.claimedBy).length;
             document.getElementById('categoryFilters').innerHTML = CATEGORIES.map(cat => {
                 const active = selectedCategory === cat;
+                const label = cat === 'Reservados'
+                    ? `<i class="fa-solid fa-check-circle mr-1" aria-hidden="true"></i>Reservados (${claimedCount})`
+                    : escapeHtml(cat);
                 return `<button type="button" data-cat="${escapeHtml(cat)}" aria-pressed="${active}"
                     class="px-3.5 py-1.5 rounded-xl font-medium transition whitespace-nowrap border ${active
                         ? 'bg-brand-brown text-white border-brand-brown shadow-sm'
-                        : 'bg-white text-brand-ink border-brand-peach hover:bg-brand-peach/50'}">${escapeHtml(cat)}</button>`;
+                        : 'bg-white text-brand-ink border-brand-peach hover:bg-brand-peach/50'}">${label}</button>`;
             }).join('');
         }
 
               function getFilteredGifts() {
             const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
             const filtered = gifts.filter(item => {
-                const okCat = selectedCategory === 'Todas' || item.category === selectedCategory;
+                               const okCat = selectedCategory === 'Todas'
+                    || (selectedCategory === 'Reservados' ? !!item.claimedBy : item.category === selectedCategory);
                 const okSearch = item.name.toLowerCase().includes(keyword) || (item.desc || '').toLowerCase().includes(keyword);
                 return okCat && okSearch;
             });
@@ -568,19 +572,26 @@
             }
         }
 
-        function renderGrid() {
+               function renderGrid() {
+            renderCategoryFilters();
             const list = getFilteredGifts();
-            const empty = document.getElementById('emptyState');
+            const emptyTitle = document.getElementById('emptyTitle');
+            const emptyText = document.getElementById('emptyText');
+
             if (loaded && gifts.length === 0) {
-                document.getElementById('emptyTitle').textContent = 'La lista aún no está cargada';
-                document.getElementById('emptyText').textContent = isAdminMode
+                emptyTitle.textContent = 'La lista aún no está cargada';
+                emptyText.textContent = isAdminMode
                     ? 'Usa "Cargar lista inicial" en el panel de organizador.'
                     : 'Vuelve pronto, la lista de regalos se está preparando.';
+            } else if (selectedCategory === 'Reservados') {
+                emptyTitle.textContent = 'Todavía no hay regalos reservados';
+                emptyText.textContent = 'Cuando alguien reserve un regalo, aparecerá aquí.';
             } else {
-                document.getElementById('emptyTitle').textContent = 'No se encontraron regalos';
-                document.getElementById('emptyText').textContent = 'Prueba con otra búsqueda o selecciona otra categoría.';
+                emptyTitle.textContent = 'No se encontraron regalos';
+                emptyText.textContent = 'Prueba con otra búsqueda o selecciona otra categoría.';
             }
-            empty.classList.toggle('hidden', list.length > 0 || !loaded);
+
+            document.getElementById('emptyState').classList.toggle('hidden', list.length > 0 || !loaded);
             document.getElementById('giftGrid').innerHTML = list.map(renderCard).join('');
             updateStats();
         }
